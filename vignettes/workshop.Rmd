@@ -1,0 +1,213 @@
+---
+title: "High-Performance Computing in R for Genomic Research"
+author: Sean Davis^[seandavi@gmail.com]
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{High-Performance Computing in R for Genomic Research}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# High-Performance Computing in R for Genomic Research
+
+Authors:
+    Jiefei Wang^[University of Texas Medical Branch at Galveston].
+    <br/>
+Last modified: 12 July, 2023
+
+## Overview
+
+### Description
+In this vignette, we will introduce the basic concepts of parallel computing and how to use parallel computing in R. We will also introduce the BiocParallel package and how to use it to speed up your analysis. This is a lecture + lab workshop, most content in this vignette will be covered in the lecture slides. This vignette serves as a reference for the workshop. In this lecture, no prior knowledge of parallel computing is required, but basic knowledge of R syntax is needed to complete this workshop.
+
+
+### Participation
+
+To follow the lecture, you can either use your own Rstudio and install the required package, or use the Rstudio cloud at [Bioconductor Workshop Galaxy](https://workshop.bioconductor.org/) (recommended). The Rstudio cloud is free to use, but you need to register an account first.
+
+
+### _R_ / _Bioconductor_ packages used
+1. parallel
+1. BiocParallel
+2. RedisParam
+3. SharedObject
+4. delayedXX
+
+### Time outline
+
+An example for a 45-minute workshop:
+
+| Activity                     | Time |
+|------------------------------|------|
+| Introduction                     | 20m  |
+| Naive way of Parallalization          | 10m  |
+| Bioconductor way of Parallalization | 20m   |
+| Performance Improvement               | 20m  |
+| Debug               | 20m  |
+| Practice               | 10m  |
+
+### Workshop goals and objectives
+
+
+
+List "big picture" student-centered workshop goals and learning
+objectives. Learning goals and objectives are related, but not the
+same thing. These goals and objectives will help some people to decide
+whether to attend the conference for training purposes, so please make
+these as precise and accurate as possible.
+
+*Learning goals* are high-level descriptions of what
+participants will learn and be able to do after the workshop is
+over. *Learning objectives*, on the other hand, describe in very
+specific and measurable terms specific skills or knowledge
+attained. The [Bloom's Taxonomy](#bloom) may be a useful framework
+for defining and describing your goals and objectives, although there
+are others.
+
+### Learning goals
+* Understanding different parallel computing backend
+* Knowing how to use BiocParallel package to speed up your analysis
+* (Advanced) Being able to do build your at-home computing cluster
+
+### Learning objectives
+
+* Experience R build-in *parallel* package
+* Experience Bioconducotr *BiocParallel* package
+* Set up computing backend
+* Run Simulation in parallel
+
+## Introduction
+While parallel computing may sound fancy and complicated, it is actually very simple at its core. For example, if you need to perform 1000 additions, you can either do it one by one by yourself, or you can ask 10 friends to do 100 additions each(be sure to treat them a nice dinner afterwards). If you choose the latter, you are doing parallel computing. In computer science, we usually call you the "master" and your friends the "workers". 
+
+Without loss of generality, a parallel computing in R involves the following steps:
+1. Start a master process
+2. Start worker processes
+3. split a job into smaller tasks
+4. send tasks to workers
+5. receive and combine results from workers
+
+The master process and the worker processes can be on the same computer or on different computers. In practice, there is no need to worry about the technical details of each step as most of these steps are handled by R parallel packages. Instead, you need to focus on some high-level questions:
+1. Where to find the workers?
+2. How many workers do you need?
+3. How do you communicate between the master and the workers?
+4. How do you combine the results from workers?
+
+These questions are the big picture of parallel computing. You will find most parallel packages only differ in the design of their syntax, but the big picture is the same. If you have a clear answer to those questions, you are ready to do parallel computing in R. 
+
+### Popular R parallel packages
+There are many parallel packages in R, here are some of the most popular ones:
+1. parallel
+2. foreach
+3. BiocParallel
+4. future
+
+In this workshop, we will briefly introduce the parallel package and focus on the BiocParallel package.
+
+## Naive way of Parallalization
+The **parallel** package is perhaps the most basic parallel package in R. It is a build-in package, so you don't need to install it. It is a good starting point to enter the world of high performance computing. Suppose you have code as follow
+```{r}
+## A function that takes a long time to run
+foo <- function(x){
+  Sys.sleep(1)
+  return(x^2)
+}
+
+lapply(1:10, foo)
+``` 
+In this artificial example, we have a function foo that will sleep for 1 second and then return the square of the input. We then apply this function to a vector of 10 numbers. If you run this code, the function **foo** will be executed 10 times and costs us 10 seconds to finish. In practice, you will replace the function **foo** with your own function that does the real work. Now, let's try to parallelize this code using the parallel package. 
+```{r}
+## Load the parallel package
+library(parallel)
+
+## Define 10 workers
+cl <- makeCluster(10)
+
+## dispath the job to workers, 
+## each of them will execute foo once
+parLapply(cl, 1:10, foo)
+```
+In this revised version, we loaded the **parallel** package and defined 10 workers at the first two lines of the code. 
+The variable **cl** is a cluster object that refers to the 10 workers. Then we used the **parLapply** function to dispatch the job to the workers. The **parLapply** function is very similar to the **lapply** function, except that it will dispatch the job to the workers. Since we want to run **foo** 10 times and we have 10 workers, each worker will run **foo** once. You will find that it will take roughly 1 second for **parLapply** to finish. 
+
+Congradulations! You have done your first parallel computing in R! Now, it is the time to think about the big picture questions. We have implemented parallel computing without answering any of those questions. Let's try to answer those questions one by one.
+
+1. **Where to find the workers**: You can possibly guess the answer to this question, we create 10 workers on the same computer as the master process. There is no magic in computer science, if you have one computer running your R code, there is no way for R to "enslaves" your neighbor's  computers to do your homework. So, the workers must be on the same computer as the master process.
+
+2. **How many workers do you need**: The answer to this question usually determined by the number of cores and memory size on your computer. In this example, we can have as many workers as we want because the function **foo** only uses negligible resources. In practice, you should use the number of cores on your computer as the number of workers if possible and reduce the worker number if your code is memory intensive.
+
+3. **How do you communicate between the master and the workers**: It will be trivial to think about this question if the master and the workers are on the same computer. However, the question will be important if you want to build a computing cluster and utilize the computing power of multiple computers. In this example, we are using a network protocal named SNOW to communicate between the master and the workers. You don't need to worry about the details of the socket protocal, but you need to know that it is a network protocal so the same code will work even if the master and the workers are on different computers given that you can connect to the workers correctly.
+
+4. **How do you combine the results from workers**: In this example, the **parLapply** function will automatically combine the results from the workers and return a list. Depending on your expected output, you may want to use **parSapply** or **parApply ** instead.
+
+## Bioconductor way of Parallalization
+### SnowParam
+The **BiocParallel** package is a parallel package developed by the Bioconductor team. It is highly customizable and actively maintained. Again, assume we have a function **foo** that takes a long time to run. We can use the **BiocParallel** package to parallelize it as follow:
+```{r}
+## Load the BiocParallel package
+library(BiocParallel)
+
+## Define 10 workers
+param <- SnowParam(worker = 10)
+
+## dispath the job to workers, 
+## each of them will execute foo once
+bplapply(1:10, foo, BPPARAM = param)
+```
+As you can see from the example, the usage of **BiocParallel** is very similar to the **parallel** package. In **BiocParallel**, we use **SnowParam** to create workers. The function explicitly states that we are going to use SNOW network protocal to communicate between the master and the workers. The cluster we created from **SnowParam** is called backend in **BiocParallel**. 
+
+You might wonder why we need another parallel package if it is so similar to the **parallel** package. The answer is that the **BiocParallel** package is highly customizable. **BiocParallel** allows you to set random seed in the workers, set the progress bar, and many more things.
+
+### MulticoreParam (Linux and Mac only)
+For Linux and Mac users, you can use the **MulticoreParam** to parallelize your code. The **MulticoreParam** is a special type of **param** that will create multiple copies of the master process to run your code. Each copy will share exactly the same data as the master process, so creating a new worker will not cost you too much memory. **MulticoreParam** is preferred over **SnowParam** if you have a big dataset and want each work own a copy of the data. The usage of **MulticoreParam** is as follow:
+```{r} 
+## Load the BiocParallel package
+library(BiocParallel)
+
+## Define 10 workers
+param <- MulticoreParam(worker = 10)
+
+## dispath the job to workers, 
+## each of them will execute foo once
+bplapply(1:10, foo, BPPARAM = param)
+```
+You can see that changing the backend only requres changing the definition of the param. The rest of the code is the same. This modern design allows you to easily share your code with others without worrying about the backend that your collaborator is using. 
+
+### RedisParam
+Now you know how to create a tiny cluster in your computer. However, you may want to create a cluster with multiple computers. You will quickly find that the **SnowParam** and **MulticoreParam** are cumbersome for this task. Some problems you may encounter are:
+1. Each workers must have a public IP address to access
+2. You need to set up SSH server and keys for all workers in order to start workers remotely
+3. The workers are not persistent, they will be killed when the master process quits.
+
+These three problems hinder the usage of **SnowParam** when handling larger computing cluster. **RedisParam** is designed for this case. Instead of having a direct communication between master and workers, **RedisParam** put a Redis server in the middle. The role of the Redis server is similar to the role of Bioconductor Developer Forum. If you have a question(computing job) and you want to get help from the other developers(workers). Do you want to contact each developer individually? Possibly not, if we use this mode to ask questions, you may need to send thousands of emails to get the answer to your question. Meanwhile, our enthusiastic developers will be overwhelmed by tons of question emails as well. To prevent that happens, we have Bioconductor Developer Forum stands in the middle between developers. You are free to post any question you want to ask, and our lovely developers will answer whatever question they can answer. The similar thing happens to **RedisParam** as well. A master process will send the job to the Redis server, and the Redis server will dispatch the job to the workers. The workers will send the results back to the Redis server, and the workers(if any) will retrieve the results from the Redis server and perform the actual computation. 
+You can even have more than one master processes sharing a pool of workers, just like you can have more than one developer asking questions in the developer forum.
+
+
+
+
+
+. The usage of **RedisParam** is as follow:
+```{r}
+
+
+
+
+
+
+
+
+There is no need for the master to know where to find the workers
+
+
+The life of a worker does not depend on the life of its master process anymore. 
+
+
+
+

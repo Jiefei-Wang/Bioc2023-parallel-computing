@@ -6,22 +6,25 @@ Authors@R:
            family = "Wang",
            role = c("aut", "cre"),
            email = "jiewang@utmb.edu")
-Description: This package serves as a template for using github actions to 
-    prepare a Bioconductor Workshop package for use. In particular,
-    a pkgdown website and docker image are generated based on workflow 
-    settings. 
+Description: This is the Bioc2023 workshop for parallel computing
+    using BiocParallel framework. The workshop will cover the basic idea
+    of parallel computing, the BiocParallel framework, and
+    RedisParam and SharedObject packages.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Depends: 
-    Biobase
+    Biobase,
+    BiocParallel,
+    RedisParam,
+    SharedObject
 Suggests: 
     knitr,
     rmarkdown,
     pkgdown
-URL: https://github.com/Jiefei-Wang/Bioc2023-parallel-computing
+URL: https://jiefei-wang.github.io/Bioc2023-parallel-computing/
 BugReports: https://github.com/Jiefei-Wang/Bioc2023-parallel-computing/issues
 VignetteBuilder: knitr
 DockerImage: ghcr.io/jiefei-wang/bioc2023-parallel-computing:latest
