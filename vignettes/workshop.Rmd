@@ -165,8 +165,8 @@ As you can see from the example, the usage of **BiocParallel** is very similar t
 
 You might wonder why we need another parallel package if it is so similar to the **parallel** package. The answer is that the **BiocParallel** package is highly customizable. **BiocParallel** allows you to set random seed in the workers, set the progress bar, and many more things.
 
-### MulticoreParam (Linux and Mac only)
-For Linux and Mac users, you can use the **MulticoreParam** to parallelize your code. The **MulticoreParam** is a special type of **param** that will create multiple copies of the master process to run your code. Each copy will share exactly the same data as the master process, so creating a new worker will not cost you too much memory. **MulticoreParam** is preferred over **SnowParam** if you have a big dataset and want each work own a copy of the data. The usage of **MulticoreParam** is as follow:
+### MulticoreParam (Linux only)
+For Linux users, you can use the **MulticoreParam** to parallelize your code. The **MulticoreParam** is a special type of **param** that will create multiple copies of the master process to run your code. Each copy will share exactly the same data as the master process, so creating a new worker will not cost you too much memory. **MulticoreParam** is preferred over **SnowParam** if you have a big dataset and want each work own a copy of the data. The usage of **MulticoreParam** is as follow:
 ```{r} 
 ## Load the BiocParallel package
 library(BiocParallel)
@@ -189,14 +189,25 @@ Now you know how to create a tiny cluster in your computer. However, you may wan
 These three problems hinder the usage of **SnowParam** when handling larger computing cluster. **RedisParam** is designed for this case. Instead of having a direct communication between master and workers, **RedisParam** put a Redis server in the middle. The role of the Redis server is similar to the role of Bioconductor Developer Forum. If you have a question(computing job) and you want to get help from the other developers(workers). Do you want to contact each developer individually? Possibly not, if we use this mode to ask questions, you may need to send thousands of emails to get the answer to your question. Meanwhile, our enthusiastic developers will be overwhelmed by tons of question emails as well. To prevent that happens, we have Bioconductor Developer Forum stands in the middle between developers. You are free to post any question you want to ask, and our lovely developers will answer whatever question they can answer. The similar thing happens to **RedisParam** as well. A master process will send the job to the Redis server, and the Redis server will dispatch the job to the workers. The workers will send the results back to the Redis server, and the workers(if any) will retrieve the results from the Redis server and perform the actual computation. 
 You can even have more than one master processes sharing a pool of workers, just like you can have more than one developer asking questions in the developer forum.
 
+The use of **RedisParam** requires a little bit more work. We need to set up a Redis server. The easiest way to do that is to use the docker image of Redis. You can install docker from [here](https://docs.docker.com/install/). After you have installed docker, you can run the following command to start a Redis server.
+```
+docker run --name my-first-redis -p 6379:6379 -d redis
+```
+Since we are using docker, chances are that the Redis server is run in a dedicated cloud server (e.g. Amazon Web Service, Azure). In this case, you might want to know how to run a docker image in a specific cloud server. In this tutorial, we will keep things simple and only run the docker image in our local computer.
 
-
-
-
-. The usage of **RedisParam** is as follow:
+After you have started the Redis server, you can use the following code to create a RedisParam.
 ```{r}
+library(BiocParallel)
+library(RedisParam)
 
+## Define 10 workers using Redis server
+param <- RedisParam(
+  workers = 10,
+  redis.hostname = 'localhost'
+)
 
+bplapply(1:10, foo, BPPARAM = param)
+```
 
 
 
