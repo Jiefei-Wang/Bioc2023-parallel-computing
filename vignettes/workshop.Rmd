@@ -41,6 +41,13 @@ To follow the lecture, you can either use your own Rstudio and install the requi
 3. SharedObject
 4. delayedXX
 
+### Useful Materials
+
+1. [Introduction to BiocParallel](https://bioconductor.org/packages/release/bioc/vignettes/BiocParallel/inst/doc/Introduction_To_BiocParallel.html)
+2. [Random Numbers in BiocParallel](https://bioconductor.org/packages/release/bioc/vignettes/BiocParallel/inst/doc/Random_Numbers.html)
+3. [Errors, Logs and Debugging in BiocParallel](https://bioconductor.org/packages/release/bioc/vignettes/BiocParallel/inst/doc/Errors_Logs_And_Debugging.pdf)
+4. Jiefei Wang's email: jiewang@utmb.edu (Questions, discussions, and collaborations are welcome)
+
 ### Time outline
 
 An example for a 45-minute workshop:
