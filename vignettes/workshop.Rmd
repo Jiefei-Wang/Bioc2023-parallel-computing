@@ -186,38 +186,84 @@ Now you know how to create a tiny cluster in your computer. However, you may wan
 2. You need to set up SSH server and keys for all workers in order to start workers remotely
 3. The workers are not persistent, they will be killed when the master process quits.
 
-These three problems hinder the usage of **SnowParam** when handling larger computing cluster. **RedisParam** is designed for this case. Instead of having a direct communication between master and workers, **RedisParam** put a Redis server in the middle. The role of the Redis server is similar to the role of Bioconductor Developer Forum. If you have a question(computing job) and you want to get help from the other developers(workers). Do you want to contact each developer individually? Possibly not, if we use this mode to ask questions, you may need to send thousands of emails to get the answer to your question. Meanwhile, our enthusiastic developers will be overwhelmed by tons of question emails as well. To prevent that happens, we have Bioconductor Developer Forum stands in the middle between developers. You are free to post any question you want to ask, and our lovely developers will answer whatever question they can answer. The similar thing happens to **RedisParam** as well. A master process will send the job to the Redis server, and the Redis server will dispatch the job to the workers. The workers will send the results back to the Redis server, and the workers(if any) will retrieve the results from the Redis server and perform the actual computation. 
+These three problems hinder the usage of **SnowParam** when handling larger computing cluster. **RedisParam** is designed for this case. Instead of having a direct communication between master and workers, **RedisParam** put a Redis server in the middle. The role of the Redis server is similar to the role of community-bioc Slack workspace. If you have a question(computing job) and you want to get help from the other developers(workers). Do you want to contact each developer individually? Possibly not, if we use this mode to ask questions, you may need to send thousands of emails to get the answer to your question. Meanwhile, our enthusiastic developers will be overwhelmed by tons of question emails as well. To prevent that happens, we have community-bioc Slack workspace stands in the middle between developers. You are free to post any question you want to ask, and our lovely developers will answer whatever question they can answer. The similar thing happens to **RedisParam** as well. A master process will send the job to the Redis server, and the Redis server will dispatch the job to the workers. The workers will send the results back to the Redis server, and the workers(if any) will retrieve the results from the Redis server and perform the actual computation. 
 You can even have more than one master processes sharing a pool of workers, just like you can have more than one developer asking questions in the developer forum.
 
-The use of **RedisParam** requires a little bit more work. We need to set up a Redis server. The easiest way to do that is to use the docker image of Redis. You can install docker from [here](https://docs.docker.com/install/). After you have installed docker, you can run the following command to start a Redis server.
+The use of **RedisParam** requires a little bit more work. We need to set up a Redis server. The easiest way to do that is to use the docker image of Redis. You can install docker from [here](https://docs.docker.com/install/). You will need WSL2(Windows Subsystem for Linux) if you are using Windows. After you have installed docker, you can run the following command to start a Redis server.
 ```
-docker run --name my-first-redis -p 6379:6379 -d redis
+docker run --name my-first-redis -p 6379:6379 -d redis redis-server --requirepass "1234"
 ```
-Since we are using docker, chances are that the Redis server is run in a dedicated cloud server (e.g. Amazon Web Service, Azure). In this case, you might want to know how to run a docker image in a specific cloud server. In this tutorial, we will keep things simple and only run the docker image in our local computer.
+The command above will start a Redis server on port 6379 with password 1234. The port number 6379 is the default port used by the Redis server. 
 
-After you have started the Redis server, you can use the following code to create a RedisParam.
+## Run master and workers in the same computer
+Running master and workers in the same computer is the simplest way(and possibly overkill) to use RedisParam. You can use the following code to create a RedisParam cluster.
 ```{r}
-library(BiocParallel)
 library(RedisParam)
 
 ## Define 10 workers using Redis server
 param <- RedisParam(
   workers = 10,
-  redis.hostname = 'localhost'
+  redis.password = '1234'
+)
+```
+The code is really not that different from the SnowParam and MulticoreParam. The RedisParam will create 10 workers that connect to the Redis server on localhost(your computer) using the password 1234. 
+
+
+
+### Cloud-based Redis server
+The real power of RedisParam comes in when you want to use a cloud-based Redis server. However, there are a two things to consider before you can use it. 
+
+1. the IP address of the Redis server. 
+2. The name of the job queue shared by master and workers
+
+Our computer uses IP address to communicate with each other. It's like the address of your house. If you want to send a letter to your friend, you need to know the address of your friend. The same thing happens to the Redis server. We need to know the IP address of the Redis server in order to talk with Redis. The job queue is a new concept here. Since we can have multiple master processes sharing the same pool of workers, we need to have a way to distinguish the jobs from different master processes. We still use Slack Workspace as an example. When you post your question, you need to post it to a specific channel. All the developers in the channel will see your question and answer it if they can. A job queue in Redis is like a channel in Slack, a master process will post its computing tasks to a specific job queue, and the workers will retrieve the tasks from the job queue. Note that multiple master processes can post their tasks to the same job queue. This way, multiple master processes can share the same pool of workers.
+
+### Start Workers
+In this workshop, we will set up a remote Redis server for you. We ask you to "donate" some workers to our demo job queue.
+```{r, eval=F}
+## Redis server IP. To be announced in the workshop
+host <- 'remote-Ip-address'
+
+## Define how many worker you want to "donate"
+param <- RedisParam(
+  workers = 2,
+  redis.hostname = host,
+  redis.password = '1234',
+  jobname = "demo",
+  is.worker = TRUE
 )
 
-bplapply(1:10, foo, BPPARAM = param)
+## Start the worker
+## This will block the entire R session
+## You CANNOT use ctrl + c to stop the worker
+## Don't be panic, I will free you after a minute
+bpstart(param)
 ```
+A few things to note here. We use **redis.hostname** to specify the IP address of the Redis server. We use **jobname** to specify the job queue we want to use. The job queue is identified by a character name. We use **is.worker = TRUE** to tell RedisParam that we want to start two workers. If FALSE, the argument **workers** will be ignored and **param** will be used as a master.
+
+
+### Start a master
+Creating a master is similar to creating a worker. The only difference is that we set **is.worker = FALSE**. We create a random job name so that all of us can share the same Redis server to do the computation.
+```{r, eval=F}
+## Redis server IP. To be announced in the workshop
+host <- 'remote-Ip-address'
+
+## Create a ramdom jobname
+jobname <- ipcid()
+
+## Create a master param
+param <- RedisParam(
+  redis.hostname = host,
+  redis.password = '1234',
+  jobname = jobname,
+  is.worker = FALSE
+)
+```
+Note that this master param cannot be used to do the computation right now, as the job queue is not monitored by any workers(you wouldn't expect to get any message from a Slack channel with no members, right?). You need the code from the previous section to start your worker elsewhere and connect with the same job queue. While the order of starting the master and workers doesn't matter, you need to have your workers ready before you use your master param to do the actual computation.
 
 
 
 
-
-
-There is no need for the master to know where to find the workers
-
-
-The life of a worker does not depend on the life of its master process anymore. 
 
 
 
