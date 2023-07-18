@@ -30,3 +30,6 @@ kiss
 
 8. All together 
 
+docker build -t parallel .
+docker run -p 6379:6379 -p 8787:8787 -e PASSWORD=bioc -d parallel
+ 

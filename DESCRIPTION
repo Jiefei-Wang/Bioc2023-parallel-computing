@@ -19,7 +19,9 @@ Depends:
     Biobase,
     BiocParallel,
     RedisParam,
-    SharedObject
+    SummarizedExperiment,
+    airway,
+    DESeq2
 Suggests: 
     knitr,
     rmarkdown,

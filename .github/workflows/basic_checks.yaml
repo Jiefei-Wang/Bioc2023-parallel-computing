@@ -42,8 +42,7 @@ jobs:
       - name: Install dependencies
         run: |
           BiocManager::repositories()
-          BiocManager::install("Jiefei-Wang/SharedObject",ask=FALSE)
-          BiocManager::install(c('Biobase','RedisParam','BiocParallel'),ask=FALSE)
+          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories())
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
@@ -140,4 +139,4 @@ jobs:
           tags: |
             ${{ env.IMAGE }}:latest
             ${{ env.IMAGE }}:${{ env.GIT_SHA }}
-
+            
