@@ -11,4 +11,6 @@ RUN Rscript -e "options(repos = c(CRAN = 'https://cran.r-project.org')); BiocMan
 
 RUN Rscript -e "options(repos = c(CRAN = 'https://cran.r-project.org')); devtools::install('.', dependencies=TRUE, build_vignettes=TRUE, repos = BiocManager::repositories())"
 
-#CMD ["/usr/bin/redis-server", '--daemonize yes --requirepass "1234"']
+#CMD ["/usr/bin/redis-server", "--daemonize","yes","--requirepass", "1234"]
+
+CMD ["sh", "-c", "/usr/bin/redis-server --daemonize yes --requirepass 1234;/init"]

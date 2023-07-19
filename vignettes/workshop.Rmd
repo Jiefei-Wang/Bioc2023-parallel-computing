@@ -293,9 +293,10 @@ param <- RedisParam(
 ```
 Note that this master `param` cannot be used to do the computation right now, as the job queue is not monitored by any workers (You wouldn't expect to get any message from a Slack channel with no members, right?). You need the code from the previous section to start your worker elsewhere and connect with the same job queue. While the order of starting the master and workers doesn't matter, you need to have your workers ready before you use your master param to do the actual computation.
 
-## Mind Map
+# Mind Map
+Below is the mind map that can help you choose different parallel backend. Please note that this mind map serves as a recommendation only. You can always try different parallel backend to see which one works best for you.
 
-
+![Mind Map](mind-map.png)
 
 # Special Topics
 ## Additional Argument
