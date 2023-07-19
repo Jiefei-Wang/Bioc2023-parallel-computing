@@ -1,6 +1,6 @@
 ---
 title: "High-Performance Computing in R for Genomic Research"
-author: Sean Davis^[seandavi@gmail.com]
+author: Jifei Wang^[szwjf08@gmail.com]
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{High-Performance Computing in R for Genomic Research}
@@ -19,33 +19,35 @@ knitr::opts_chunk$set(
 ```
 
 # High-Performance Computing in R for Genomic Research
-Authors:
-    Jiefei Wang^[University of Texas Medical Branch at Galveston].
-    <br/>
-Last modified: 12 July, 2023
-
-## Description
-In this vignette, we will introduce the basic concepts of parallel computing and how to use parallel computing in R. We will also introduce the BiocParallel package and how to use it to speed up your analysis. This is a lecture + lab workshop, most content in this vignette will be covered in the lecture slides. This vignette serves as a reference for the workshop. In this lecture, no prior knowledge of parallel computing is required, but basic knowledge of R syntax is needed to complete this workshop.
+In this vignette, we will introduce the basic concepts of parallel computing and how to use parallel computing in R. We will also introduce the BiocParallel package and how to use it to speed up your analysis. This is a lecture + lab workshop, most content in this vignette will be covered in the lecture slides. This vignette serves as a reference for the workshop. In this lecture, no prior knowledge of parallel computing is required, but basic knowledge of R syntax is needed to complete this workshop. 
 
 
 ## Participation
-
 To follow the lecture, you can either use your own Rstudio and install the required package, or use the Rstudio cloud at [Bioconductor Workshop Galaxy](https://workshop.bioconductor.org/) (recommended). The Rstudio cloud is free to use, but you need to register an account first.
 
+## Parallel Computing Packages in R
+There are many parallel packages in R, here are some of the most popular ones:
+1. parallel
+2. foreach
+3. BiocParallel
+4. future
+
+In this workshop, we will focus on the BiocParallel package, which is the official parallel package used in Bioconductor.
 
 ## _R_ / _Bioconductor_ packages used
 1. parallel
 1. BiocParallel
 2. RedisParam
-3. SharedObject
-4. delayedXX
+3. SummarizedExperiment (for example)
+4. airway (for example)
+5. DESeq2 (for example)
 
 ## Useful Materials
 
 1. [Introduction to BiocParallel](https://bioconductor.org/packages/release/bioc/vignettes/BiocParallel/inst/doc/Introduction_To_BiocParallel.html)
 2. [Random Numbers in BiocParallel](https://bioconductor.org/packages/release/bioc/vignettes/BiocParallel/inst/doc/Random_Numbers.html)
 3. [Errors, Logs and Debugging in BiocParallel](https://bioconductor.org/packages/release/bioc/vignettes/BiocParallel/inst/doc/Errors_Logs_And_Debugging.pdf)
-4. Jiefei Wang's email: jiewang@utmb.edu (Questions, discussions, and collaborations are welcome)
+4. Jiefei Wang's email: szwjf08@gmail.com (Questions, discussions, and collaborations are welcome)
 
 ## Time outline
 
@@ -54,10 +56,9 @@ An example for a 45-minute workshop:
 | Activity                     | Time |
 |------------------------------|------|
 | Introduction                     | 20m  |
-| Bioconductor way of Parallalization | 30m   |
-| Performance Improvement               | 20m  |
-| Debug               | 20m  |
-| Practice               | 10m  |
+| Parallalization using BiocParallel | 30m   |
+| General tips for Parallel computing               | 20m  |
+| Examples               | 20m  |
 
 ## Workshop goals and objectives
 
@@ -82,7 +83,6 @@ are others.
 * (Advanced) Be able to do build your at-home computing cluster
 
 ## Learning objectives
-
 * Run **bplapply** function with different parallel backend
 * Connect with a Redis server using RedisParam
 * Use BiocParallel to run a permutation algorithm with a backend of your choice
@@ -115,14 +115,6 @@ The cluster structure and job-splitting structure gives a big picture of paralle
 
 The answer to these three questions determine the best way to construct your computing cluster and the best parallel function to use. 
 
-# Popular R parallel packages
-There are many parallel packages in R, here are some of the most popular ones:
-1. parallel
-2. foreach
-3. BiocParallel
-4. future
-
-In this workshop, we will focus on the BiocParallel package, which is the official parallel package used in Bioconductor.
 
 # Parallalization In BiocParallel
 The BiocParallel package is a parallel package developed and maintained by the Bioconductor core team. It is highly customizable package equipped with modern design. Assume that you have a poorly written function `square` that takes at least 1 second to calculate the square of a number
@@ -183,7 +175,7 @@ In my computer, it takes 8.06 seconds to finish the **lapply** function and 4.95
 
 In practice, question 1 and 2 are related. The location of the worker determines the appropriate communication method between the master and the workers. Generally speaking, it will be sufficient to use the **SnowParam** function to do parallel computing on your local computer. However, as your code becomes more computing intensive, you may want to connect with other computers to speed up the calculation. We will introduce some other backends in the following sections that will be helpful to solve a more complicated parallel computing problem.
 
-# MulticoreParam (Linux only, or WSL2 for Win Users)
+## MulticoreParam (Linux only, or WSL2 for Win Users)
 MulticoreParam is similar to SnowParam, but it has the potential to reduce the overhead associated with parallelization. Traditionally, if we create a worker and give it a task, the worker will need the data to do the calculation. This data will be sent by the master process to the worker and takes certain amount of memory. If we have 4 workers, we will have 4 copies of the data. This is not a problem if the data is small, but it will be a problem in genomics researchs where the data can be big. MulticoreParam is used to alleviate this problem. MulticoreParam is a special type of **param** that allow workers and master to share the same data in memory(they must be on the same computer). This means that we only need one copy of the data in memory, and we can use 4 workers to do the calculation. To define a MulticoreParam, you only need to replace the **SnowParam** with **MulticoreParam** in the previous example.
 ```{r} 
 ## Define 4 workers
@@ -196,7 +188,7 @@ bplapply(1:4, square, BPPARAM = param)
 You can see that changing the backend only requres changing the definition of the param. The rest of the code is the same. This modern design allows you to write your parallel code without tied to a specific backend. You can easily switch between different backends without changing your code. This is a very important feature of the BiocParallel package. The cluster structure of MulticoreParam is exactly the same as SnowParam. The only difference is how the workers get started (This is not completely true, but it is good enough for our workshop).  
 
 
-# RedisParam
+## RedisParam
 Now you know how to create a tiny computing cluster in your lcoal computer. However, our demand for computing power is endless and we will quickly find that a single computer is not enough to handle our computing task. We are still able to use the SnowParam to create a cluster with multiple computers as SNOW is a network protocal. In this case, the cluster structure might become like this:
 
 
@@ -215,7 +207,7 @@ Note that the three components(master, Redis Server, and workers) in the diagram
 
 
 
-## Set Up Redis Server
+### Set Up Redis Server
 The use of RedisParam requires a little bit more work. We need to set up a Redis server. The easiest way to do that is to use the docker image of Redis. [Here](https://docs.docker.com/install/) is the instruction to install docker on your computer. You will need WSL2(Windows Subsystem for Linux) if you are using Windows. After you have installed docker, you can run the following command to start a Redis server.
 ```
 docker run --name my-first-redis -p 6379:6379 -d redis redis-server --requirepass "1234"
@@ -224,9 +216,9 @@ The command above will start a Redis server on port 6379 with password 1234. The
 
 Alternatively, you might run the [docker image](https://hub.docker.com/_/redis) using the cloud container service. You can find the container service through all major cloud service providers such as Azure and Amazon. In this workshop, we provide a pre-configured Redis server running in the backgroud in the container. You are ready to go if you are using the workshop container
 
-## Run master and workers in the same computer 
+### Run master and workers in the same computer 
 If you have the Redis server running on your computer. You can use the following code to create a RedisParam cluster.
-```{r}
+```{r, eval=FALSE}
 library(RedisParam)
 
 ## Define 4 workers using Redis server
@@ -246,7 +238,7 @@ The code is really not that different from the SnowParam and MulticoreParam. The
 All three components(master, Redis server, and workers) are in the same machine. Clearly, there is no need to use RedisParam if we only have one computer. We will introduce how to run master and workers in different computers in the next section.
 
 
-## Run Master and Workers in Different Computers
+### Run Master and Workers in Different Computers
 The real power of RedisParam comes in when you want to connect with multiple computers to create a large cluster. In this case, you need a Redis server that is accessible by all the computers (Otherwise, how can they talk to each other?). There are a two things you need for using RedisParam
 
 1. the IP address of the Redis server. 
@@ -254,7 +246,7 @@ The real power of RedisParam comes in when you want to connect with multiple com
 
 We have seen the IP address in the previous section. The job queue is a new concept here. A job queue is like a channel in Slack, it's a place where you can post your question and get answers from other developers. A master process can only be in one job queue at a time. It can post its computing tasks to the job queue. The workers enrolled in the same job queue will retrieve the tasks from the job queue and execute them. Multiple master processes can enroll in the same job queue. Therefore, they can share the same pool of workers. A Redis server can have multiple job queues running at the same time without interfering with each other. Just like a Slack workspace can have multiple channels at the same time.
 
-### Start Workers
+#### Start Workers
 In this workshop, we will set up a remote Redis server for you. We ask you to "donate" some workers to our demo job queue.
 ```{r, eval=FALSE}
 ## Redis server IP. To be announced in the workshop
@@ -281,9 +273,9 @@ A few new things to note here. We use **redis.hostname** to specify the IP addre
 This will be the most complicated cluster we will build in this workshop, but you can clearly see the power of RedisParam. The master and workers can be in different computers. The master and workers can be in different networks. The number of workers can be dynamic. As long as the Redis server is accessible by all the computers, they can form a cluster.
 
 
-### Start a master
+#### Start a master
 Creating a master is similar to creating a worker. The only difference is that we set **is.worker = FALSE**. We create a random job name so that all of us can share the same Redis server to do the computation.
-```{r}
+```{r, eval=FALSE}
 ## Redis server IP. To be announced in the workshop
 host <- 'remote-Ip-address'
 
@@ -300,6 +292,10 @@ param <- RedisParam(
 )
 ```
 Note that this master `param` cannot be used to do the computation right now, as the job queue is not monitored by any workers (You wouldn't expect to get any message from a Slack channel with no members, right?). You need the code from the previous section to start your worker elsewhere and connect with the same job queue. While the order of starting the master and workers doesn't matter, you need to have your workers ready before you use your master param to do the actual computation.
+
+## Mind Map
+
+
 
 # Special Topics
 ## Additional Argument
