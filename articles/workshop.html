@@ -669,9 +669,16 @@ actual computation.</p>
 </div>
 </div>
 </div>
-<div class="section level3">
-<h3 id="mind-map">Mind Map<a class="anchor" aria-label="anchor" href="#mind-map"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="mind-map">Mind Map<a class="anchor" aria-label="anchor" href="#mind-map"></a>
+</h2>
+<p>Below is the mind map that can help you choose different parallel
+backend. Please note that this mind map serves as a recommendation only.
+You can always try different parallel backend to see which one works
+best for you.</p>
+<div class="float">
+<img src="mind-map.png" alt="Mind Map"><div class="figcaption">Mind Map</div>
 </div>
 </div>
 <div class="section level2">
@@ -902,7 +909,7 @@ equal)</p>
 <span><span class="co">## Calculate t statistic</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test</a></span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span></span>
 <span><span class="co">#&gt;          t </span></span>
-<span><span class="co">#&gt; -0.1034282</span></span></code></pre></div>
+<span><span class="co">#&gt; -0.9864734</span></span></code></pre></div>
 <p>The code above generate two samples from the uniform distribution and
 calculate the t statistic. We wrap the code in a function so that we can
 use it in the parallel backend</p>
@@ -965,7 +972,7 @@ statistics</p>
 <code class="sourceCode R"><span><span class="co">## Test the function</span></span>
 <span><span class="co">## Small value implies significance</span></span>
 <span><span class="fu">BJStat</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.1082699</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.04925353</span></span></code></pre></div>
 <p>We will use <code>airway</code> data in the airway package as an
 example. We first load the data into R.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
