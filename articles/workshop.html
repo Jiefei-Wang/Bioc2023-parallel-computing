@@ -50,13 +50,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/HOWTO_BUILD_WORKSHOP.html">How To Build A Workshop Package</a>
-    </li>
-    <li>
       <a href="../articles/workshop.html">High-Performance Computing in R for Genomic Research</a>
-    </li>
-    <li>
-      <a href="../articles/workshop_example.html">An Example Workshop</a>
     </li>
   </ul>
 </li>
@@ -83,7 +77,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>High-Performance Computing in R for Genomic
 Research</h1>
-                        <h4 data-toc-skip class="author">Sean Davis<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+                        <h4 data-toc-skip class="author">Jifei Wang<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
 </h4>
             
       
@@ -97,13 +91,6 @@ Research</h1>
 <div class="section level2">
 <h2 id="high-performance-computing-in-r-for-genomic-research">High-Performance Computing in R for Genomic Research<a class="anchor" aria-label="anchor" href="#high-performance-computing-in-r-for-genomic-research"></a>
 </h2>
-<p>Authors: Jiefei Wang<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. <br> Last modified: 12 July, 2023</p>
-<div class="section level3">
-<h3 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
-</h3>
-<div class="section level4">
-<h4 id="description">Description<a class="anchor" aria-label="anchor" href="#description"></a>
-</h4>
 <p>In this vignette, we will introduce the basic concepts of parallel
 computing and how to use parallel computing in R. We will also introduce
 the BiocParallel package and how to use it to speed up your analysis.
@@ -112,30 +99,38 @@ covered in the lecture slides. This vignette serves as a reference for
 the workshop. In this lecture, no prior knowledge of parallel computing
 is required, but basic knowledge of R syntax is needed to complete this
 workshop.</p>
-</div>
-<div class="section level4">
-<h4 id="participation">Participation<a class="anchor" aria-label="anchor" href="#participation"></a>
-</h4>
+<div class="section level3">
+<h3 id="participation">Participation<a class="anchor" aria-label="anchor" href="#participation"></a>
+</h3>
 <p>To follow the lecture, you can either use your own Rstudio and
 install the required package, or use the Rstudio cloud at <a href="https://workshop.bioconductor.org/" class="external-link">Bioconductor Workshop
 Galaxy</a> (recommended). The Rstudio cloud is free to use, but you need
 to register an account first.</p>
 </div>
-<div class="section level4">
-<h4 id="r-bioconductor-packages-used">
+<div class="section level3">
+<h3 id="parallel-computing-packages-in-r">Parallel Computing Packages in R<a class="anchor" aria-label="anchor" href="#parallel-computing-packages-in-r"></a>
+</h3>
+<p>There are many parallel packages in R, here are some of the most
+popular ones: 1. parallel 2. foreach 3. BiocParallel 4. future</p>
+<p>In this workshop, we will focus on the BiocParallel package, which is
+the official parallel package used in Bioconductor.</p>
+</div>
+<div class="section level3">
+<h3 id="r-bioconductor-packages-used">
 <em>R</em> / <em>Bioconductor</em> packages used<a class="anchor" aria-label="anchor" href="#r-bioconductor-packages-used"></a>
-</h4>
+</h3>
 <ol style="list-style-type: decimal">
 <li>parallel</li>
 <li>BiocParallel</li>
 <li>RedisParam</li>
-<li>SharedObject</li>
-<li>delayedXX</li>
+<li>SummarizedExperiment (for example)</li>
+<li>airway (for example)</li>
+<li>DESeq2 (for example)</li>
 </ol>
 </div>
-<div class="section level4">
-<h4 id="useful-materials">Useful Materials<a class="anchor" aria-label="anchor" href="#useful-materials"></a>
-</h4>
+<div class="section level3">
+<h3 id="useful-materials">Useful Materials<a class="anchor" aria-label="anchor" href="#useful-materials"></a>
+</h3>
 <ol style="list-style-type: decimal">
 <li><a href="https://bioconductor.org/packages/release/bioc/vignettes/BiocParallel/inst/doc/Introduction_To_BiocParallel.html" class="external-link">Introduction
 to BiocParallel</a></li>
@@ -143,13 +138,13 @@ to BiocParallel</a></li>
 Numbers in BiocParallel</a></li>
 <li><a href="https://bioconductor.org/packages/release/bioc/vignettes/BiocParallel/inst/doc/Errors_Logs_And_Debugging.pdf" class="external-link">Errors,
 Logs and Debugging in BiocParallel</a></li>
-<li>Jiefei Wang’s email: <a href="mailto:jiewang@utmb.edu" class="email">jiewang@utmb.edu</a> (Questions, discussions, and
+<li>Jiefei Wang’s email: <a href="mailto:szwjf08@gmail.com" class="email">szwjf08@gmail.com</a> (Questions, discussions, and
 collaborations are welcome)</li>
 </ol>
 </div>
-<div class="section level4">
-<h4 id="time-outline">Time outline<a class="anchor" aria-label="anchor" href="#time-outline"></a>
-</h4>
+<div class="section level3">
+<h3 id="time-outline">Time outline<a class="anchor" aria-label="anchor" href="#time-outline"></a>
+</h3>
 <p>An example for a 45-minute workshop:</p>
 <table class="table">
 <thead><tr class="header">
@@ -162,31 +157,23 @@ collaborations are welcome)</li>
 <td>20m</td>
 </tr>
 <tr class="even">
-<td>Naive way of Parallalization</td>
-<td>10m</td>
+<td>Parallalization using BiocParallel</td>
+<td>30m</td>
 </tr>
 <tr class="odd">
-<td>Bioconductor way of Parallalization</td>
+<td>General tips for Parallel computing</td>
 <td>20m</td>
 </tr>
 <tr class="even">
-<td>Performance Improvement</td>
+<td>Examples</td>
 <td>20m</td>
-</tr>
-<tr class="odd">
-<td>Debug</td>
-<td>20m</td>
-</tr>
-<tr class="even">
-<td>Practice</td>
-<td>10m</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="section level4">
-<h4 id="workshop-goals-and-objectives">Workshop goals and objectives<a class="anchor" aria-label="anchor" href="#workshop-goals-and-objectives"></a>
-</h4>
+<div class="section level3">
+<h3 id="workshop-goals-and-objectives">Workshop goals and objectives<a class="anchor" aria-label="anchor" href="#workshop-goals-and-objectives"></a>
+</h3>
 <p>List “big picture” student-centered workshop goals and learning
 objectives. Learning goals and objectives are related, but not the same
 thing. These goals and objectives will help some people to decide
@@ -200,123 +187,116 @@ specific and measurable terms specific skills or knowledge attained. The
 defining and describing your goals and objectives, although there are
 others.</p>
 </div>
-<div class="section level4">
-<h4 id="learning-goals">Learning goals<a class="anchor" aria-label="anchor" href="#learning-goals"></a>
-</h4>
+<div class="section level3">
+<h3 id="learning-goals">Learning goals<a class="anchor" aria-label="anchor" href="#learning-goals"></a>
+</h3>
 <ul>
-<li>Understanding different parallel computing backend</li>
-<li>Knowing how to use BiocParallel package to speed up your
-analysis</li>
-<li>(Advanced) Being able to do build your at-home computing
-cluster</li>
+<li>Understand how parallel computing works</li>
+<li>Understand different parallel computing backend</li>
+<li>Know how to use BiocParallel package to speed up your analysis</li>
+<li>(Advanced) Be able to do build your at-home computing cluster</li>
 </ul>
-</div>
-<div class="section level4">
-<h4 id="learning-objectives">Learning objectives<a class="anchor" aria-label="anchor" href="#learning-objectives"></a>
-</h4>
-<ul>
-<li>Experience R build-in <em>parallel</em> package</li>
-<li>Experience Bioconducotr <em>BiocParallel</em> package</li>
-<li>Set up computing backend</li>
-<li>Run Simulation in parallel</li>
-</ul>
-</div>
 </div>
 <div class="section level3">
-<h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+<h3 id="learning-objectives">Learning objectives<a class="anchor" aria-label="anchor" href="#learning-objectives"></a>
 </h3>
+<ul>
+<li>Run <strong>bplapply</strong> function with different parallel
+backend</li>
+<li>Connect with a Redis server using RedisParam</li>
+<li>Use BiocParallel to run a permutation algorithm with a backend of
+your choice</li>
+</ul>
+</div>
+</div>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>With the recent “core war” between Intel and AMD, two major CPU
+manufacturers, the number of cores in a CPU has been increasing rapidly.
+For example, the latest AMD Ryzen 9 7950X equipped with 16 cores and 32
+threads. This monster-level CPU provides a huge amount of computing
+power for performing large-scale data analysis. However, most of the
+time, we are not using the full power of our CPU as R is desinged as a
+single-threaded programming language. This design makes R easy to learn
+and use, but it also limits the computing power of R. In this workshop,
+we will introduce how to use parallel computing to fully utilize the
+power of your CPU and build your own at-home computing cluster.</p>
 <p>While parallel computing may sound fancy and complicated, it is
-actually very simple at its core. For example, if you need to perform
-1000 additions, you can either do it one by one by yourself, or you can
-ask 10 friends to do 100 additions each(be sure to treat them a nice
-dinner afterwards). If you choose the latter, you are doing parallel
+actually very simple at its core. There are many packages in R that can
+help you to do parallel computing, but they all share the same basic
+idea: <strong>split a job into smaller tasks and run them
+simultaneously</strong>. For example, if you need to perform 1000
+additions, you can either do it one by one by yourself, or you can ask
+10 friends to do 100 additions each(be sure to treat them a nice dinner
+afterwards). If you choose the latter, you are actually doing parallel
 computing. In computer science, we usually call you the “master” and
-your friends the “workers”.</p>
-<p>Without loss of generality, a parallel computing in R involves the
-following steps: 1. Start a master process 2. Start worker processes 3.
-split a job into smaller tasks 4. send tasks to workers 5. receive and
-combine results from workers</p>
-<p>The master process and the worker processes can be on the same
-computer or on different computers. In practice, there is no need to
-worry about the technical details of each step as most of these steps
-are handled by R parallel packages. Instead, you need to focus on some
-high-level questions: 1. Where to find the workers? 2. How many workers
-do you need? 3. How do you communicate between the master and the
-workers? 4. How do you combine the results from workers?</p>
-<p>These questions are the big picture of parallel computing. You will
-find most parallel packages only differ in the design of their syntax,
-but the big picture is the same. If you have a clear answer to those
-questions, you are ready to do parallel computing in R.</p>
-<div class="section level4">
-<h4 id="popular-r-parallel-packages">Popular R parallel packages<a class="anchor" aria-label="anchor" href="#popular-r-parallel-packages"></a>
-</h4>
-<p>There are many parallel packages in R, here are some of the most
-popular ones: 1. parallel 2. foreach 3. BiocParallel 4. future</p>
-<p>In this workshop, we will briefly introduce the parallel package and
-focus on the BiocParallel package.</p>
+your friends the “workers”. Without loss of generality, a parallel
+computing in R involves the following steps: 1. Start a master process
+2. Start worker processes 3. split a job into smaller tasks 4. send
+tasks to workers 5. receive and combine results from workers</p>
+<p>There are two layers of framwork in parallel computing: cluster
+structure and job-splitting structure. The cluster structure decide
+where to find the workers and how to communicate with them(step 1,2,and
+4). The job-splitting structure decide how to split a job into smaller
+tasks and send them to the workers(step 3). The simplest cluster is
+shown in the following figure: <img src="direct_connection.png" alt="Parallel Computing via Direct Connection"></p>
+<p>The structure above shows a master R session and 4 worker R sessions.
+The key point of this structure is that the master and workers can
+directly talk with each other without any message relay. The master and
+workers can be in a single computer or in different computers. However,
+as you will see in the later section of this workshop, this structure
+works best if both master and workers are in the same machine. The
+situation will become complicated if you want to use multiple computers
+as workers.</p>
+<p>The job-splitting structure decide how to split a job into smaller
+tasks and send them to the workers. The job-splitting structure is shown
+in the following figure: <img src="job-splitting.png" alt="job-splitting structure"></p>
+<p>In parallel computing, we call the thing you want to compute a “job”.
+A job is usually a loop or a function that you want to run multiple
+times. We split the job into smaller “tasks” and send them to the
+workers. By doing this we can run multiple tasks simultaneously.</p>
+<p>The cluster structure and job-splitting structure gives a big picture
+of parallel computing. In practice, we find that if will be helpful to
+think about the following three questions before you start your parallel
+computing: 1. Where to create the workers 2. How do you communicate
+between the master and the workers 3. What is the expected result</p>
+<p>The answer to these three questions determine the best way to
+construct your computing cluster and the best parallel function to
+use.</p>
 </div>
-</div>
-<div class="section level3">
-<h3 id="naive-way-of-parallalization">Naive way of Parallalization<a class="anchor" aria-label="anchor" href="#naive-way-of-parallalization"></a>
-</h3>
-<p>The <strong>parallel</strong> package is perhaps the most basic
-parallel package in R. It is a build-in package, so you don’t need to
-install it. It is a good starting point to enter the world of high
-performance computing. Suppose you have code as follow</p>
+<div class="section level2">
+<h2 id="parallalization-in-biocparallel">Parallalization In BiocParallel<a class="anchor" aria-label="anchor" href="#parallalization-in-biocparallel"></a>
+</h2>
+<p>The BiocParallel package is a parallel package developed and
+maintained by the Bioconductor core team. It is highly customizable
+package equipped with modern design. Assume that you have a poorly
+written function <code>square</code> that takes at least 1 second to
+calculate the square of a number</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## A function that takes a long time to run</span></span>
-<span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span></span>
+<span><span class="va">square</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="va">foo</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [[1]]</span></span>
-<span><span class="co">#&gt; [1] 1</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[2]]</span></span>
-<span><span class="co">#&gt; [1] 4</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[3]]</span></span>
-<span><span class="co">#&gt; [1] 9</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[4]]</span></span>
-<span><span class="co">#&gt; [1] 16</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[5]]</span></span>
-<span><span class="co">#&gt; [1] 25</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[6]]</span></span>
-<span><span class="co">#&gt; [1] 36</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[7]]</span></span>
-<span><span class="co">#&gt; [1] 49</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[8]]</span></span>
-<span><span class="co">#&gt; [1] 64</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[9]]</span></span>
-<span><span class="co">#&gt; [1] 81</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[10]]</span></span>
-<span><span class="co">#&gt; [1] 100</span></span></code></pre></div>
-<p>In this artificial example, we have a function foo that will sleep
-for 1 second and then return the square of the input. We then apply this
-function to a vector of 10 numbers. If you run this code, the function
-<strong>foo</strong> will be executed 10 times and costs us 10 seconds
-to finish. In practice, you will replace the function
-<strong>foo</strong> with your own function that does the real work.
-Now, let’s try to parallelize this code using the parallel package.</p>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Suppose we want to calculate the square of the numbers from 1 to 8.
+There are two ways to do this:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Load the parallel package</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">parallel</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co">## Method 1: for loop</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu">square</span><span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; 1</span></span>
+<span><span class="co">#&gt; 4</span></span>
+<span><span class="co">#&gt; 9</span></span>
+<span><span class="co">#&gt; 16</span></span>
+<span><span class="co">#&gt; 25</span></span>
+<span><span class="co">#&gt; 36</span></span>
+<span><span class="co">#&gt; 49</span></span>
+<span><span class="co">#&gt; 64</span></span>
 <span></span>
-<span><span class="co">## Define 10 workers</span></span>
-<span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">## dispath the job to workers, </span></span>
-<span><span class="co">## each of them will execute foo once</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/parallel/clusterApply.html" class="external-link">parLapply</a></span><span class="op">(</span><span class="va">cl</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="va">foo</span><span class="op">)</span></span>
+<span><span class="co">## Method 2: lapply</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, <span class="va">square</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; [1] 1</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -339,79 +319,23 @@ Now, let’s try to parallelize this code using the parallel package.</p>
 <span><span class="co">#&gt; [1] 49</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[8]]</span></span>
-<span><span class="co">#&gt; [1] 64</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[9]]</span></span>
-<span><span class="co">#&gt; [1] 81</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[10]]</span></span>
-<span><span class="co">#&gt; [1] 100</span></span></code></pre></div>
-<p>In this revised version, we loaded the <strong>parallel</strong>
-package and defined 10 workers at the first two lines of the code. The
-variable <strong>cl</strong> is a cluster object that refers to the 10
-workers. Then we used the <strong>parLapply</strong> function to
-dispatch the job to the workers. The <strong>parLapply</strong> function
-is very similar to the <strong>lapply</strong> function, except that it
-will dispatch the job to the workers. Since we want to run
-<strong>foo</strong> 10 times and we have 10 workers, each worker will
-run <strong>foo</strong> once. You will find that it will take roughly 1
-second for <strong>parLapply</strong> to finish.</p>
-<p>Congradulations! You have done your first parallel computing in R!
-Now, it is the time to think about the big picture questions. We have
-implemented parallel computing without answering any of those questions.
-Let’s try to answer those questions one by one.</p>
-<ol style="list-style-type: decimal">
-<li><p><strong>Where to find the workers</strong>: You can possibly
-guess the answer to this question, we create 10 workers on the same
-computer as the master process. There is no magic in computer science,
-if you have one computer running your R code, there is no way for R to
-“enslaves” your neighbor’s computers to do your homework. So, the
-workers must be on the same computer as the master process.</p></li>
-<li><p><strong>How many workers do you need</strong>: The answer to this
-question usually determined by the number of cores and memory size on
-your computer. In this example, we can have as many workers as we want
-because the function <strong>foo</strong> only uses negligible
-resources. In practice, you should use the number of cores on your
-computer as the number of workers if possible and reduce the worker
-number if your code is memory intensive.</p></li>
-<li><p><strong>How do you communicate between the master and the
-workers</strong>: It will be trivial to think about this question if the
-master and the workers are on the same computer. However, the question
-will be important if you want to build a computing cluster and utilize
-the computing power of multiple computers. In this example, we are using
-a network protocal named SNOW to communicate between the master and the
-workers. You don’t need to worry about the details of the socket
-protocal, but you need to know that it is a network protocal so the same
-code will work even if the master and the workers are on different
-computers given that you can connect to the workers correctly.</p></li>
-<li><p><strong>How do you combine the results from workers</strong>: In
-this example, the <strong>parLapply</strong> function will automatically
-combine the results from the workers and return a list. Depending on
-your expected output, you may want to use <strong>parSapply</strong> or
-<strong>parApply </strong> instead.</p></li>
-</ol>
-</div>
-<div class="section level3">
-<h3 id="bioconductor-way-of-parallalization">Bioconductor way of Parallalization<a class="anchor" aria-label="anchor" href="#bioconductor-way-of-parallalization"></a>
-</h3>
-<div class="section level4">
-<h4 id="snowparam">SnowParam<a class="anchor" aria-label="anchor" href="#snowparam"></a>
-</h4>
-<p>The <strong>BiocParallel</strong> package is a parallel package
-developed by the Bioconductor team. It is highly customizable and
-actively maintained. Again, assume we have a function
-<strong>foo</strong> that takes a long time to run. We can use the
-<strong>BiocParallel</strong> package to parallelize it as follow:</p>
+<span><span class="co">#&gt; [1] 64</span></span></code></pre></div>
+<p>with no surprise, both methods will take 8 seconds to finish. This
+artificial example does not have any meaning in practice, but it is a
+good example to show the power of parallel computing. Since calculating
+the square of a number is independent of each other(E.g. square(1) does
+not depend on square(2)), we can parallelize this code to speed up the
+calculation</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load the BiocParallel package</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Bioconductor/BiocParallel" class="external-link">BiocParallel</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## Define 10 workers</span></span>
-<span><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html" class="external-link">SnowParam</a></span><span class="op">(</span>worker <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co">## Define 4 workers</span></span>
+<span><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html" class="external-link">SnowParam</a></span><span class="op">(</span>worker <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## dispath the job to workers, </span></span>
 <span><span class="co">## each of them will execute foo once</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="va">foo</span>, BPPARAM <span class="op">=</span> <span class="va">param</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, <span class="va">square</span>, BPPARAM <span class="op">=</span> <span class="va">param</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; [1] 1</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -434,49 +358,97 @@ actively maintained. Again, assume we have a function
 <span><span class="co">#&gt; [1] 49</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[8]]</span></span>
-<span><span class="co">#&gt; [1] 64</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[9]]</span></span>
-<span><span class="co">#&gt; [1] 81</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[10]]</span></span>
-<span><span class="co">#&gt; [1] 100</span></span></code></pre></div>
-<p>As you can see from the example, the usage of
-<strong>BiocParallel</strong> is very similar to the
-<strong>parallel</strong> package. In <strong>BiocParallel</strong>, we
-use <strong>SnowParam</strong> to create workers. The function
-explicitly states that we are going to use SNOW network protocal to
-communicate between the master and the workers. The cluster we created
-from <strong>SnowParam</strong> is called backend in
-<strong>BiocParallel</strong>.</p>
-<p>You might wonder why we need another parallel package if it is so
-similar to the <strong>parallel</strong> package. The answer is that the
-<strong>BiocParallel</strong> package is highly customizable.
-<strong>BiocParallel</strong> allows you to set random seed in the
-workers, set the progress bar, and many more things.</p>
+<span><span class="co">#&gt; [1] 64</span></span></code></pre></div>
+<p>The function <strong>SnowParam</strong> defines 4 workers that we are
+going to use in the parallel computation. You do not have to explicitly
+specify the argument <code>worker</code> in any <code>Param</code>
+function, so <code>SnowParam(4)</code> will work equally well. In
+BiocParallel, we call a cluster of workers a backend (as they are
+working in the background). The master and workers communicate with each
+other directly via a network protocal named SNOW(so the name SnowParam).
+The cluster structure of this example is shown in the following figure:
+<img src="Snow-structure.png" alt="SnowParam"></p>
+<p>The function <strong>bplapply</strong> is a parallel version of the
+<strong>lapply</strong> function. It dispatchs 8 elements in the vector
+<strong>1:8</strong> to 4 workers in backend.If we use our job-splitting
+schematic diagram, it will look like this</p>
+<div class="float">
+<img src="job-splitting-example.png" alt="job-splitting structure"><div class="figcaption">job-splitting structure</div>
 </div>
-<div class="section level4">
-<h4 id="multicoreparam-linux-only">MulticoreParam (Linux only)<a class="anchor" aria-label="anchor" href="#multicoreparam-linux-only"></a>
-</h4>
-<p>For Linux users, you can use the <strong>MulticoreParam</strong> to
-parallelize your code. The <strong>MulticoreParam</strong> is a special
-type of <strong>param</strong> that will create multiple copies of the
-master process to run your code. Each copy will share exactly the same
-data as the master process, so creating a new worker will not cost you
-too much memory. <strong>MulticoreParam</strong> is preferred over
-<strong>SnowParam</strong> if you have a big dataset and want each work
-own a copy of the data. The usage of <strong>MulticoreParam</strong> is
-as follow:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Load the BiocParallel package</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Bioconductor/BiocParallel" class="external-link">BiocParallel</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">## Define 10 workers</span></span>
-<span><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/MulticoreParam-class.html" class="external-link">MulticoreParam</a></span><span class="op">(</span>worker <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<p>In this case, the master R will evenly split the 8 elements into 4
+tasks and send them to the workers. Each worker will calculate the
+square of 2 numbers and return their results. It will take 2 seconds to
+finish the calculation.</p>
+<p>We can use <strong>system.time</strong> to benchmark the running time
+of the <strong>lapply</strong> function and the
+<strong>bplapply</strong> function</p>
+<pre><code>&gt; system.time(lapply(1:8, square))
+   user  system elapsed 
+   0.00    0.00    8.06 
+&gt; system.time(bplapply(1:8, square, BPPARAM = param))
+   user  system elapsed 
+   0.33    0.10    4.95 </code></pre>
+<p>In my computer, it takes 8.06 seconds to finish the
+<strong>lapply</strong> function and 4.95 seconds to finish the
+<strong>bplapply</strong> function. We do see the improvement in running
+time, but it is not as good as we expected. This is because there is
+some overhead associated with parallelization. In this example, the cost
+of parallelization is about 3 seconds. We will discuss how to improve
+the performance of parallel computing later in this workshop, but for
+now let’s ignore it and think about the three questions we mentioned in
+the previous section:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Where to create the workers</strong>: You can possibly
+guess the answer to this question, we create 4 workers on the same
+computer as the master process. There is no magic in computer science,
+if you have one computer running your R code, there is no way for R to
+“enslaves” your neighbor’s computers to do your homework. So, the
+workers must be on the same computer as the master process.</p></li>
+<li><p><strong>How do you communicate between the master and the
+workers</strong>: In this example, we are using a network protocal named
+SNOW to communicate between the master and the workers(so the name
+SnowParam). You don’t need to worry about the details of the socket
+protocal, the parallel packages will take care of it for you.</p></li>
+<li><p><strong>What is the expected result</strong>: In this example,
+the <strong>parLapply</strong> function will return a list as the
+result. If your want to have a vector output, you may want to use
+<strong>parSapply</strong> or <strong>parApply</strong>, which are the
+parallel versions of the <strong>sapply</strong> and
+<strong>apply</strong> functions respectively.</p></li>
+</ol>
+<p>In practice, question 1 and 2 are related. The location of the worker
+determines the appropriate communication method between the master and
+the workers. Generally speaking, it will be sufficient to use the
+<strong>SnowParam</strong> function to do parallel computing on your
+local computer. However, as your code becomes more computing intensive,
+you may want to connect with other computers to speed up the
+calculation. We will introduce some other backends in the following
+sections that will be helpful to solve a more complicated parallel
+computing problem.</p>
+<div class="section level3">
+<h3 id="multicoreparam-linux-only-or-wsl2-for-win-users">MulticoreParam (Linux only, or WSL2 for Win Users)<a class="anchor" aria-label="anchor" href="#multicoreparam-linux-only-or-wsl2-for-win-users"></a>
+</h3>
+<p>MulticoreParam is similar to SnowParam, but it has the potential to
+reduce the overhead associated with parallelization. Traditionally, if
+we create a worker and give it a task, the worker will need the data to
+do the calculation. This data will be sent by the master process to the
+worker and takes certain amount of memory. If we have 4 workers, we will
+have 4 copies of the data. This is not a problem if the data is small,
+but it will be a problem in genomics researchs where the data can be
+big. MulticoreParam is used to alleviate this problem. MulticoreParam is
+a special type of <strong>param</strong> that allow workers and master
+to share the same data in memory(they must be on the same computer).
+This means that we only need one copy of the data in memory, and we can
+use 4 workers to do the calculation. To define a MulticoreParam, you
+only need to replace the <strong>SnowParam</strong> with
+<strong>MulticoreParam</strong> in the previous example.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Define 4 workers</span></span>
+<span><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/MulticoreParam-class.html" class="external-link">MulticoreParam</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## dispath the job to workers, </span></span>
 <span><span class="co">## each of them will execute foo once</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="va">foo</span>, BPPARAM <span class="op">=</span> <span class="va">param</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="va">square</span>, BPPARAM <span class="op">=</span> <span class="va">param</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; [1] 1</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -487,125 +459,149 @@ as follow:</p>
 <span><span class="co">#&gt; [1] 9</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[4]]</span></span>
-<span><span class="co">#&gt; [1] 16</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[5]]</span></span>
-<span><span class="co">#&gt; [1] 25</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[6]]</span></span>
-<span><span class="co">#&gt; [1] 36</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[7]]</span></span>
-<span><span class="co">#&gt; [1] 49</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[8]]</span></span>
-<span><span class="co">#&gt; [1] 64</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[9]]</span></span>
-<span><span class="co">#&gt; [1] 81</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[10]]</span></span>
-<span><span class="co">#&gt; [1] 100</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 16</span></span></code></pre></div>
 <p>You can see that changing the backend only requres changing the
 definition of the param. The rest of the code is the same. This modern
-design allows you to easily share your code with others without worrying
-about the backend that your collaborator is using.</p>
+design allows you to write your parallel code without tied to a specific
+backend. You can easily switch between different backends without
+changing your code. This is a very important feature of the BiocParallel
+package. The cluster structure of MulticoreParam is exactly the same as
+SnowParam. The only difference is how the workers get started (This is
+not completely true, but it is good enough for our workshop).</p>
 </div>
+<div class="section level3">
+<h3 id="redisparam">RedisParam<a class="anchor" aria-label="anchor" href="#redisparam"></a>
+</h3>
+<p>Now you know how to create a tiny computing cluster in your lcoal
+computer. However, our demand for computing power is endless and we will
+quickly find that a single computer is not enough to handle our
+computing task. We are still able to use the SnowParam to create a
+cluster with multiple computers as SNOW is a network protocal. In this
+case, the cluster structure might become like this:</p>
+<div class="float">
+<img src="Snow-frame-multiple.png" alt="job-splitting structure"><div class="figcaption">job-splitting structure</div>
+</div>
+<p>In this structure, we have three computers. Computer 1 has the master
+process and computer 2 and 3 have two workers each. We use IP address to
+communicate between the master and the workers. The IP address serves as
+the address of the computer. It is like the address of your house. If
+you want to send a letter to your friend, you need to know the address
+of your friend. The same thing happens here. We need to know the IP
+address of the worker computer(computer 2&amp;3) in order to talk the
+workers inside. With this schematic diagram, you will quickly find that
+the SnowParam is cumbersome for a large cluster because: 1. Each worker
+computer must have a public IP address to access 2. The workers are not
+persistent, they will be killed when the master process quits. 3. You
+need to set up SSH server and keys for all workers in order to start
+workers remotely (Remember that computer 2 and 3 might not be physically
+accessible)</p>
+<p>These three problems hinder the usage of SnowParam when handling
+larger computing cluster. RedisParam is designed for this case. Instead
+of having a direct communication between master and workers, RedisParam
+put a Redis server in the middle. The diagram below shows the general
+cluster structure of this kind of design</p>
+<div class="float">
+<img src="RedisParam.png" alt="server-center"><div class="figcaption">server-center</div>
+</div>
+<p>Note that the three components(master, Redis Server, and workers) in
+the diagram can run in the same machine or different machines. However,
+only the Redis Server is required to have a public IP address. The role
+of the Redis server is similar to the role of Bioconductor Slack
+workspace. If you have a question(computing job) and you want to get
+help from the other developers(workers). Do you want to message each
+developer individually? Possibly not, if we use this mode to ask
+questions, you may need to send thousands of messages to get the answer
+to your question. Meanwhile, our enthusiastic developers will be
+overwhelmed by tons of questions as well. To prevent that happens,
+Bioconductor hosts a Slack workspace for Q&amp;A. You are free to post
+any question to a Slack channel, and our lovely developers will answer
+whatever question they can answer. The similar thing happens to
+<strong>RedisParam</strong> as well. A master process will send the job
+to the Redis server. The workers will receive tasks from the Redis
+server and do the calculation. By doing that, the lifecycle of the
+workers is not tied to the master process, but the Redis server. You can
+even have more than one master processes sharing a pool of workers, just
+like everyone is welcome to ask questions in Slack.</p>
 <div class="section level4">
-<h4 id="redisparam">RedisParam<a class="anchor" aria-label="anchor" href="#redisparam"></a>
+<h4 id="set-up-redis-server">Set Up Redis Server<a class="anchor" aria-label="anchor" href="#set-up-redis-server"></a>
 </h4>
-<p>Now you know how to create a tiny cluster in your computer. However,
-you may want to create a cluster with multiple computers. You will
-quickly find that the <strong>SnowParam</strong> and
-<strong>MulticoreParam</strong> are cumbersome for this task. Some
-problems you may encounter are: 1. Each workers must have a public IP
-address to access 2. You need to set up SSH server and keys for all
-workers in order to start workers remotely 3. The workers are not
-persistent, they will be killed when the master process quits.</p>
-<p>These three problems hinder the usage of <strong>SnowParam</strong>
-when handling larger computing cluster. <strong>RedisParam</strong> is
-designed for this case. Instead of having a direct communication between
-master and workers, <strong>RedisParam</strong> put a Redis server in
-the middle. The role of the Redis server is similar to the role of
-community-bioc Slack workspace. If you have a question(computing job)
-and you want to get help from the other developers(workers). Do you want
-to contact each developer individually? Possibly not, if we use this
-mode to ask questions, you may need to send thousands of emails to get
-the answer to your question. Meanwhile, our enthusiastic developers will
-be overwhelmed by tons of question emails as well. To prevent that
-happens, we have community-bioc Slack workspace stands in the middle
-between developers. You are free to post any question you want to ask,
-and our lovely developers will answer whatever question they can answer.
-The similar thing happens to <strong>RedisParam</strong> as well. A
-master process will send the job to the Redis server, and the Redis
-server will dispatch the job to the workers. The workers will send the
-results back to the Redis server, and the workers(if any) will retrieve
-the results from the Redis server and perform the actual computation.
-You can even have more than one master processes sharing a pool of
-workers, just like you can have more than one developer asking questions
-in the developer forum.</p>
-<p>The use of <strong>RedisParam</strong> requires a little bit more
-work. We need to set up a Redis server. The easiest way to do that is to
-use the docker image of Redis. You can install docker from <a href="https://docs.docker.com/install/" class="external-link">here</a>. You will need
+<p>The use of RedisParam requires a little bit more work. We need to set
+up a Redis server. The easiest way to do that is to use the docker image
+of Redis. <a href="https://docs.docker.com/install/" class="external-link">Here</a> is the
+instruction to install docker on your computer. You will need
 WSL2(Windows Subsystem for Linux) if you are using Windows. After you
 have installed docker, you can run the following command to start a
 Redis server.</p>
 <pre><code>docker run --name my-first-redis -p 6379:6379 -d redis redis-server --requirepass "1234"</code></pre>
 <p>The command above will start a Redis server on port 6379 with
 password 1234. The port number 6379 is the default port used by the
-Redis server.</p>
+Redis server. We use <code>-p 6379:6379</code> to open that port to the
+outside world, so you can access the Redis server in the container from
+your computer.</p>
+<p>Alternatively, you might run the <a href="https://hub.docker.com/_/redis" class="external-link">docker image</a> using the cloud
+container service. You can find the container service through all major
+cloud service providers such as Azure and Amazon. In this workshop, we
+provide a pre-configured Redis server running in the backgroud in the
+container. You are ready to go if you are using the workshop
+container</p>
 </div>
-</div>
-<div class="section level3">
-<h3 id="run-master-and-workers-in-the-same-computer">Run master and workers in the same computer<a class="anchor" aria-label="anchor" href="#run-master-and-workers-in-the-same-computer"></a>
-</h3>
-<p>Running master and workers in the same computer is the simplest
-way(and possibly overkill) to use RedisParam. You can use the following
-code to create a RedisParam cluster.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="section level4">
+<h4 id="run-master-and-workers-in-the-same-computer">Run master and workers in the same computer<a class="anchor" aria-label="anchor" href="#run-master-and-workers-in-the-same-computer"></a>
+</h4>
+<p>If you have the Redis server running on your computer. You can use
+the following code to create a RedisParam cluster.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">RedisParam</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## Define 10 workers using Redis server</span></span>
+<span><span class="co">## Define 4 workers using Redis server</span></span>
 <span><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RedisParam/man/RedisParam-class.html" class="external-link">RedisParam</a></span><span class="op">(</span></span>
-<span>  workers <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  workers <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  redis.password <span class="op">=</span> <span class="st">'1234'</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Test the cluster</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="va">square</span>, BPPARAM <span class="op">=</span> <span class="va">param</span><span class="op">)</span></span></code></pre></div>
 <p>The code is really not that different from the SnowParam and
-MulticoreParam. The RedisParam will create 10 workers that connect to
-the Redis server on localhost(your computer) using the password
-1234.</p>
+MulticoreParam. The RedisParam will create 4 workers that connect to the
+Redis server on localhost(your computer) using the password 1234. If we
+use the cluster structure diagram, it will look like this:</p>
+<div class="float">
+<img src="RedisParam-single.png" alt="RedisParam-single"><div class="figcaption">RedisParam-single</div>
+</div>
+<p>All three components(master, Redis server, and workers) are in the
+same machine. Clearly, there is no need to use RedisParam if we only
+have one computer. We will introduce how to run master and workers in
+different computers in the next section.</p>
+</div>
 <div class="section level4">
-<h4 id="cloud-based-redis-server">Cloud-based Redis server<a class="anchor" aria-label="anchor" href="#cloud-based-redis-server"></a>
+<h4 id="run-master-and-workers-in-different-computers">Run Master and Workers in Different Computers<a class="anchor" aria-label="anchor" href="#run-master-and-workers-in-different-computers"></a>
 </h4>
-<p>The real power of RedisParam comes in when you want to use a
-cloud-based Redis server. However, there are a two things to consider
-before you can use it.</p>
+<p>The real power of RedisParam comes in when you want to connect with
+multiple computers to create a large cluster. In this case, you need a
+Redis server that is accessible by all the computers (Otherwise, how can
+they talk to each other?). There are a two things you need for using
+RedisParam</p>
 <ol style="list-style-type: decimal">
 <li>the IP address of the Redis server.</li>
 <li>The name of the job queue shared by master and workers</li>
 </ol>
-<p>Our computer uses IP address to communicate with each other. It’s
-like the address of your house. If you want to send a letter to your
-friend, you need to know the address of your friend. The same thing
-happens to the Redis server. We need to know the IP address of the Redis
-server in order to talk with Redis. The job queue is a new concept here.
-Since we can have multiple master processes sharing the same pool of
-workers, we need to have a way to distinguish the jobs from different
-master processes. We still use Slack Workspace as an example. When you
-post your question, you need to post it to a specific channel. All the
-developers in the channel will see your question and answer it if they
-can. A job queue in Redis is like a channel in Slack, a master process
-will post its computing tasks to a specific job queue, and the workers
-will retrieve the tasks from the job queue. Note that multiple master
-processes can post their tasks to the same job queue. This way, multiple
-master processes can share the same pool of workers.</p>
-</div>
-<div class="section level4">
-<h4 id="start-workers">Start Workers<a class="anchor" aria-label="anchor" href="#start-workers"></a>
-</h4>
+<p>We have seen the IP address in the previous section. The job queue is
+a new concept here. A job queue is like a channel in Slack, it’s a place
+where you can post your question and get answers from other developers.
+A master process can only be in one job queue at a time. It can post its
+computing tasks to the job queue. The workers enrolled in the same job
+queue will retrieve the tasks from the job queue and execute them.
+Multiple master processes can enroll in the same job queue. Therefore,
+they can share the same pool of workers. A Redis server can have
+multiple job queues running at the same time without interfering with
+each other. Just like a Slack workspace can have multiple channels at
+the same time.</p>
+<div class="section level5">
+<h5 id="start-workers">Start Workers<a class="anchor" aria-label="anchor" href="#start-workers"></a>
+</h5>
 <p>In this workshop, we will set up a remote Redis server for you. We
 ask you to “donate” some workers to our demo job queue.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Redis server IP. To be announced in the workshop</span></span>
 <span><span class="va">host</span> <span class="op">&lt;-</span> <span class="st">'remote-Ip-address'</span></span>
 <span></span>
@@ -623,27 +619,37 @@ ask you to “donate” some workers to our demo job queue.</p>
 <span><span class="co">## You CANNOT use ctrl + c to stop the worker</span></span>
 <span><span class="co">## Don't be panic, I will free you after a minute</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/BiocParallelParam-class.html" class="external-link">bpstart</a></span><span class="op">(</span><span class="va">param</span><span class="op">)</span></span></code></pre></div>
-<p>A few things to note here. We use <strong>redis.hostname</strong> to
-specify the IP address of the Redis server. We use
+<p>A few new things to note here. We use <strong>redis.hostname</strong>
+to specify the IP address of the Redis server. We use
 <strong>jobname</strong> to specify the job queue we want to use. The
 job queue is identified by a character name. We use <strong>is.worker =
 TRUE</strong> to tell RedisParam that we want to start two workers. If
-FALSE, the argument <strong>workers</strong> will be ignored and
-<strong>param</strong> will be used as a master.</p>
+<strong>is.worker = FALSE</strong>, the argument
+<strong>workers</strong> will be ignored and the backend will be used as
+a master. If we do not specify the argument <strong>is.worker</strong>,
+The backend will contains both master and workers by default. The
+cluster diagram of the current setup is shown below. <img src="RedisParam-multiple.png" alt="RedisParam-multiple"></p>
+<p>This will be the most complicated cluster we will build in this
+workshop, but you can clearly see the power of RedisParam. The master
+and workers can be in different computers. The master and workers can be
+in different networks. The number of workers can be dynamic. As long as
+the Redis server is accessible by all the computers, they can form a
+cluster.</p>
 </div>
-<div class="section level4">
-<h4 id="start-a-master">Start a master<a class="anchor" aria-label="anchor" href="#start-a-master"></a>
-</h4>
+<div class="section level5">
+<h5 id="start-a-master">Start a master<a class="anchor" aria-label="anchor" href="#start-a-master"></a>
+</h5>
 <p>Creating a master is similar to creating a worker. The only
 difference is that we set <strong>is.worker = FALSE</strong>. We create
 a random job name so that all of us can share the same Redis server to
 do the computation.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Redis server IP. To be announced in the workshop</span></span>
 <span><span class="va">host</span> <span class="op">&lt;-</span> <span class="st">'remote-Ip-address'</span></span>
 <span></span>
 <span><span class="co">## Create a ramdom jobname</span></span>
 <span><span class="va">jobname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/ipcmutex.html" class="external-link">ipcid</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"My job queue: "</span>, <span class="va">jobname</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Create a master param</span></span>
 <span><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RedisParam/man/RedisParam-class.html" class="external-link">RedisParam</a></span><span class="op">(</span></span>
@@ -652,22 +658,416 @@ do the computation.</p>
 <span>  jobname <span class="op">=</span> <span class="va">jobname</span>,</span>
 <span>  is.worker <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Note that this master param cannot be used to do the computation
-right now, as the job queue is not monitored by any workers(you wouldn’t
-expect to get any message from a Slack channel with no members, right?).
-You need the code from the previous section to start your worker
-elsewhere and connect with the same job queue. While the order of
-starting the master and workers doesn’t matter, you need to have your
-workers ready before you use your master param to do the actual
-computation.</p>
+<p>Note that this master <code>param</code> cannot be used to do the
+computation right now, as the job queue is not monitored by any workers
+(You wouldn’t expect to get any message from a Slack channel with no
+members, right?). You need the code from the previous section to start
+your worker elsewhere and connect with the same job queue. While the
+order of starting the master and workers doesn’t matter, you need to
+have your workers ready before you use your master param to do the
+actual computation.</p>
 </div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="mind-map">Mind Map<a class="anchor" aria-label="anchor" href="#mind-map"></a>
+</h3>
+</div>
+</div>
+<div class="section level2">
+<h2 id="special-topics">Special Topics<a class="anchor" aria-label="anchor" href="#special-topics"></a>
+</h2>
+<div class="section level3">
+<h3 id="additional-argument">Additional Argument<a class="anchor" aria-label="anchor" href="#additional-argument"></a>
+</h3>
+<p>It is very common to have additional arguments in an R function. For
+example, if we have an add function <code>add</code> that takes two
+arguments <code>x</code> and <code>y</code></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>In <code>bplapply</code>, the second argument <code>y</code> in
+<code>add</code> can be set by passing an (named) argument to
+<code>...</code> in <code>bplapply</code></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="va">add</span>, y <span class="op">=</span> <span class="fl">1</span>, BPPARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html" class="external-link">SnowParam</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; [1] 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; [1] 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; [1] 4</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span>
+<span><span class="co">#&gt; [1] 5</span></span></code></pre></div>
+<p>You can pass as many argument as you need after specifying the
+function you are applying in <code>bplapply</code> (in our case, it is
+the function <code>add</code>). Although the argument name is not
+required, we recommend you to use it for clarity.</p>
+</div>
+<div class="section level3">
+<h3 id="error-handling">Error Handling<a class="anchor" aria-label="anchor" href="#error-handling"></a>
+</h3>
+<p>In practice, it is inevitable to have bugs in your code. The
+<code>bplapply</code> function will stop if it encounters an error.
+Reading the error message can help you to better debug the code.
+However, the error is not always understandable. We provide two general
+tips to help you debug the code 1. Shortening the first argment
+<code>X</code> in <code>bplapply</code> 2. Start with a smaller worker
+number 3. Try SerialParam</p>
+<div class="section level4">
+<h4 id="shortening-the-first-argment-x-in-bplapply">Shortening the first argment <code>X</code> in
+<code>bplapply</code><a class="anchor" aria-label="anchor" href="#shortening-the-first-argment-x-in-bplapply"></a>
+</h4>
+<p>Shortening the first argment <code>X</code> in <code>bplapply</code>
+not only reduce the time you will need to wait until observing an error.
+It also simplify the code you are trying to debug. If you want to ask
+others for help. Having a short and reproducible code is always a good
+idea.</p>
+</div>
+<div class="section level4">
+<h4 id="start-with-a-smaller-worker-number">Start with a smaller worker number<a class="anchor" aria-label="anchor" href="#start-with-a-smaller-worker-number"></a>
+</h4>
+<p>Since each worker takes a certain amount of resources, it is possible
+that the error is caused by the lack of resources (E.g. insufficient
+memory). Starting with a smaller worker number can help you to exclude
+this possibility. Meanwhile, having a smaller number of workers can make
+it easier for others to run your code(If you are using cloud computing,
+no one want to reproduce your error with 128 workers).</p>
+</div>
+<div class="section level4">
+<h4 id="try-serialparam">Try SerialParam<a class="anchor" aria-label="anchor" href="#try-serialparam"></a>
+</h4>
+<p>If you are not sure whether the error is caused by the workers, you
+can try to use <code>SerialParam</code> to run your code in a single
+process. <code>SerialParam</code> is a special backend that does not use
+any parallel computing and run your code in the current R session. You
+can even use debugger to debug your code. For example, you can debug the
+<code>add</code> function during the single-threaded parallel computing
+by using the following code</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">add2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">x</span> <span class="op">+</span> <span class="va">y</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="va">add2</span>, <span class="fl">1</span>, BPPARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html" class="external-link">SerialParam</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>The R session will stop before executing <code>x + y</code></p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="loading-balance">Loading balance<a class="anchor" aria-label="anchor" href="#loading-balance"></a>
+</h3>
+<p>In some cases, the function execution time can be uneven. For
+example, if we have the following code</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">wait</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Sys.sleep.html" class="external-link">Sys.sleep</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="va">wait</span>, BPPARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html" class="external-link">SnowParam</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Even without overhead in parallel computing, the code above will take
+7 seconds to finish. The reason is that the second worker needs to
+calculate <code>wait(3)</code> and <code>wait(4)</code>. It will cause
+the second worker sleep for 7 seconds. Although the first worker only
+needs 3 seconds to finish. <code>bplapply</code> must wait until all the
+workers finish their jobs. We call this situation <strong>unbalanced
+loading</strong>.</p>
+<p>One solution for solving unbalanced loading is to increase the
+granularity of the task. Recall that <code>bplapply</code> will split
+the first argument <code>X</code> into smaller pieces(tasks) and assign
+them to the workers. The number of tasks is equal to the number of
+workers by default. However, we can force it to create more tasks than
+the workers by setting the argument <code>tasks</code> in
+<code>SnowParam</code>. For example, the code below will create 4 tasks
+for 2 workers.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="va">wait</span>, BPPARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html" class="external-link">SnowParam</a></span><span class="op">(</span><span class="fl">2</span>, task <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>If you want each task to contain exactly one element of
+<code>X</code>, you can set <code>task=.Machine$integer.max</code>.
+However, please note that this will increase the overhead in parallel
+computing.</p>
+</div>
+<div class="section level3">
+<h3 id="progress-bar">Progress bar<a class="anchor" aria-label="anchor" href="#progress-bar"></a>
+</h3>
+<p>Enabling the progress bar is very easy. You just need to set
+<code>progressbar = TRUE</code> in <code>SnowParam</code>. However, the
+progress bar can only be updated when a worker returns a result. Since a
+worker only returns result when it completes a task, you might observe a
+“bump” in the progress bar each time a worker completes a task. To have
+a smoother progress bar, you need to consider to increase the
+granularity of the task. The code below shows the most smooth progress
+bar you can get with <code>bplapply</code></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Each task will have exactly one element</span></span>
+<span><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html" class="external-link">SnowParam</a></span><span class="op">(</span><span class="fl">2</span>, task <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">integer.max</span>, progressbar <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">## The progress bar will be updated when a wait function completes</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="va">wait</span>, BPPARAM <span class="op">=</span> <span class="va">param</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="optimization">optimization<a class="anchor" aria-label="anchor" href="#optimization"></a>
+</h3>
+<p>To optimize the performance of parallel computing, you need to
+understand the source of overhead in parallel computing. There are four
+parts of overhead in parallel computing 1. Worker creation 2. Data
+transfer 3. Job splitting 4. worker environment preparation While items
+3 and 4 are handled internally in BiocParallel and thus unavoidable, you
+can reduce the overhead from item 1 and 2 by using the following tips.
+Note that the tips are for <code>SnowParam</code>. If you are using
+<code>MulticoreParam</code>, the overhead of items 1 and 2 are
+negligible and therefore there is no need to optimize them.</p>
+<div class="section level4">
+<h4 id="create-workers-in-advance">Create workers in advance<a class="anchor" aria-label="anchor" href="#create-workers-in-advance"></a>
+</h4>
+<p>Creating workers is a time-consuming process. If we do not explicitly
+create workers, <code>bplapply</code> will create workers when it is
+called and stop the workers when it finishes. Therefore, if you want to
+call <code>bplapply</code> repeatively, you might want to create workers
+in advance to avoid the overhead of worker creating. The code below
+shows how to manually create workers</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Define a SnowParam backend</span></span>
+<span><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html" class="external-link">SnowParam</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Manually Create workers</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/BiocParallelParam-class.html" class="external-link">bpstart</a></span><span class="op">(</span><span class="va">param</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Run a parallel computing job</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="va">add</span>, y <span class="op">=</span> <span class="fl">1</span>, BPPARAM <span class="op">=</span> <span class="va">param</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Manually stop workers</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/BiocParallelParam-class.html" class="external-link">bpstop</a></span><span class="op">(</span><span class="va">param</span><span class="op">)</span></span></code></pre></div>
+<p>We can also time the code above to see the overhead of worker
+creation</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Parallel code without worker creation</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="va">add</span>, y <span class="op">=</span> <span class="fl">1</span>, BPPARAM <span class="op">=</span> <span class="va">param</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<pre><code>user  system elapsed 
+0.62    0.08    2.09 </code></pre>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/BiocParallelParam-class.html" class="external-link">bpstart</a></span><span class="op">(</span><span class="va">param</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="va">add</span>, y <span class="op">=</span> <span class="fl">1</span>, BPPARAM <span class="op">=</span> <span class="va">param</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/BiocParallelParam-class.html" class="external-link">bpstop</a></span><span class="op">(</span><span class="va">param</span><span class="op">)</span></span></code></pre></div>
+<pre><code>user  system elapsed 
+0.21    0.03    0.48 </code></pre>
+<p>In Rstudio, it takes about 1.5 seconds to create 2 workers. The cost
+will be more significant if you have more workers, or the workers are
+created in a remote machine.</p>
+</div>
+<div class="section level4">
+<h4 id="avoid-data-transfer">Avoid data transfer<a class="anchor" aria-label="anchor" href="#avoid-data-transfer"></a>
+</h4>
+<p>Data transfer is another source of overhead in parallel computing. It
+is especially significant when the data is large. Data transfer should
+be kept to a minimum level if possible. A general stratigy is to avoid
+using a large R object during parallel computing. However, we understand
+this requires a redesign of the algorithm and is not always possible. In
+this section, we provide a simple tip that can reduce the data transfer
+in some cases. You can disable exporting R environment variables by
+setting <code>exportglobals = FALSE</code> in
+<code>SnowParam</code>.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html" class="external-link">SnowParam</a></span><span class="op">(</span><span class="fl">2</span>, exportglobals <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p>This will prevent <code>bplapply</code> from exporting the R
+environment variables to the workers. It is especially important when
+you are using RStudio as RStudio will define many environment variables
+for you.</p>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
+<div class="section level3">
+<h3 id="example-1-monte-carlo-simulation">Example 1: Monte Carlo Simulation<a class="anchor" aria-label="anchor" href="#example-1-monte-carlo-simulation"></a>
+</h3>
+<p>Parallel computing is usually used in simulation and permutation. In
+this example, we will use simulation to show the distribution of the T
+statistic given that the null hypothesis is true(group means are
+equal)</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Sample size for each group</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10000</span></span>
+<span></span>
+<span><span class="co">## Simulate from the uniform distribution</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Calculate t statistic</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test</a></span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span></span>
+<span><span class="co">#&gt;          t </span></span>
+<span><span class="co">#&gt; -0.1034282</span></span></code></pre></div>
+<p>The code above generate two samples from the uniform distribution and
+calculate the t statistic. We wrap the code in a function so that we can
+use it in the parallel backend</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mySim</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">i</span>, <span class="va">n</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span>  <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test</a></span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>where the argument <code>i</code> is purely for the
+<code>bplapply</code> function and does not have any meaning. Suppose we
+want to repeat the simulation 10000 times, we first use the
+<code>lapply</code> function to measure the baseline time</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span></span>
+<span>   <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10000</span>, <span class="va">mySim</span>, n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code>user  system elapsed 
+7.92    1.00    8.91</code></pre>
+<p>In my computer, it takes about 9 seconds to finish the computation.
+Now we use <code>bplapply</code> to do the same thing and see the
+performance improvement using all the optimization method we have learnt
+so far</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Bioconductor/BiocParallel" class="external-link">BiocParallel</a></span><span class="op">)</span></span>
+<span><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html" class="external-link">SnowParam</a></span><span class="op">(</span><span class="fl">10</span>, exportglobals <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/BiocParallelParam-class.html" class="external-link">bpstart</a></span><span class="op">(</span><span class="va">param</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10000</span>, <span class="va">mySim</span>, n <span class="op">=</span> <span class="va">n</span>, BPPARAM<span class="op">=</span><span class="va">param</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/BiocParallelParam-class.html" class="external-link">bpstop</a></span><span class="op">(</span><span class="va">param</span><span class="op">)</span></span></code></pre></div>
+<pre><code>user  system elapsed 
+0.23    0.00    1.47 </code></pre>
+<p>It takes about 1.5 seconds to finish. We can see that the performance
+is improved by a factor of 6. The performance improvement is not as good
+as we expected. This is because the simulation is still too simple and
+the overhead of parallel computing is large compared to the actual
+computation. However, as the tasks get more complicated, the performance
+improvement will be more significant.</p>
+</div>
+<div class="section level3">
+<h3 id="example-2-permutation-for-finding-the-null-distribution">Example 2: Permutation for Finding the Null Distribution<a class="anchor" aria-label="anchor" href="#example-2-permutation-for-finding-the-null-distribution"></a>
+</h3>
+<p>The Berk-Jones statistic is designed to test if a set of p-values are
+from uniform distribution. In other words, it aims to test if all
+p-values are from the null distribution. It is known that calculating
+the exact distribution of Berk-Jones statistic is computationally
+intensive. Therefore, we will use the permutation method to approximate
+the distribution. Below is the code to calculate the Berk-Jone
+statistics</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">BJStat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">samples</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">samples</span><span class="op">[</span><span class="va">samples</span><span class="op">==</span><span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1e-10</span></span>
+<span>  <span class="va">samples</span><span class="op">[</span><span class="va">samples</span><span class="op">==</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">-</span><span class="fl">1e-10</span></span>
+<span>  <span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="va">samples</span><span class="op">)</span></span>
+<span>  <span class="va">i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">samples</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Beta.html" class="external-link">pbeta</a></span><span class="op">(</span><span class="va">samples</span>, <span class="va">i</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">samples</span><span class="op">)</span><span class="op">-</span><span class="va">i</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Test the function</span></span>
+<span><span class="co">## Small value implies significance</span></span>
+<span><span class="fu">BJStat</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.1082699</span></span></code></pre></div>
+<p>We will use <code>airway</code> data in the airway package as an
+example. We first load the data into R.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/SummarizedExperiment" class="external-link">SummarizedExperiment</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">airway</span>, package<span class="op">=</span><span class="st">"airway"</span><span class="op">)</span></span>
+<span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assays</a></span><span class="op">(</span><span class="va">airway</span><span class="op">)</span><span class="op">$</span><span class="va">counts</span></span>
+<span><span class="va">groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">airway</span><span class="op">)</span><span class="op">$</span><span class="va">dex</span></span>
+<span></span>
+<span><span class="co">## Check the dimension of the data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 63677     8</span></span>
+<span></span>
+<span><span class="co">## groups is a factor variable</span></span>
+<span><span class="va">groups</span></span>
+<span><span class="co">#&gt; [1] untrt trt   untrt trt   untrt trt   untrt trt  </span></span>
+<span><span class="co">#&gt; Levels: trt untrt</span></span></code></pre></div>
+<p>The variable <code>counts</code> has 63677 rows and 8 columns. Each
+row represents a gene and each column represents a sample. The variable
+<code>groups</code> is a factor variable that indicates the treatment
+group of each sample.</p>
+<p>We will use DESeq pipeline to perform a negative binomial test and
+obtain the p-value for each gene. Because we will reuse the pipeline
+many times in the permutation, we can wrap the pipeline into a
+function.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## my negative binomial test</span></span>
+<span><span class="va">myNBTest</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">counts</span>, <span class="va">groups</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mikelove/DESeq2" class="external-link">DESeq2</a></span><span class="op">)</span></span>
+<span>    <span class="co"># Create a data frame for the grouping variable</span></span>
+<span>    <span class="va">colData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">groups</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="co"># Create a DESeqDataSet object</span></span>
+<span>    <span class="va">dds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/DESeqDataSet.html" class="external-link">DESeqDataSetFromMatrix</a></span><span class="op">(</span>countData <span class="op">=</span> <span class="va">counts</span>,</span>
+<span>                                  colData <span class="op">=</span> <span class="va">colData</span>,</span>
+<span>                                  design <span class="op">=</span> <span class="op">~</span> <span class="va">group</span><span class="op">)</span></span>
+<span>    <span class="co"># Run the DESeq pipeline</span></span>
+<span>    <span class="va">dds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/DESeq.html" class="external-link">DESeq</a></span><span class="op">(</span><span class="va">dds</span>, quiet<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span>    <span class="co"># Get the results</span></span>
+<span>    <span class="va">pvalues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DESeq2/man/results.html" class="external-link">results</a></span><span class="op">(</span><span class="va">dds</span><span class="op">)</span><span class="op">$</span><span class="va">pvalue</span> </span>
+<span>    <span class="co"># Exclude NA values</span></span>
+<span>    <span class="va">pvalues</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">pvalues</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>We can put everything together and perform the Berk-Jones test on the
+p-values.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pvalues</span> <span class="op">&lt;-</span> <span class="fu">myNBTest</span><span class="op">(</span><span class="va">counts</span>, <span class="va">groups</span><span class="op">)</span></span>
+<span><span class="co">## Histogram</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">pvalues</span><span class="op">)</span></span></code></pre></div>
+<p><img src="workshop_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Test if all p-values are from the uniform distribution</span></span>
+<span><span class="fu">BJStat</span><span class="op">(</span><span class="va">pvalues</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<p>Now we have all ingredients ready, we can start the permutation. We
+will randomly shuffle the group labels and perform the Berk-Jones test
+on the shuffled data. We wrap the permutation into a function.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">myPermutation</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">i</span>, <span class="va">counts</span>, <span class="va">groups</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="co">## Randomly shuffle the group labels</span></span>
+<span>  <span class="va">groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">groups</span><span class="op">)</span></span>
+<span>  <span class="co">## Perform the Berk-Jones test</span></span>
+<span>  <span class="va">pvalues</span> <span class="op">&lt;-</span> <span class="fu">myNBTest</span><span class="op">(</span><span class="va">counts</span>, <span class="va">groups</span><span class="op">)</span></span>
+<span>  <span class="co">## Return the Berk-Jones statistic</span></span>
+<span>  <span class="fu">BJStat</span><span class="op">(</span><span class="va">pvalues</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>The variable <code>i</code> is purely for the <code>bplapply</code>
+function and does not have any effect. Let’s test and benchmark our
+permutation function</p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">myPermutation</span><span class="op">(</span><span class="va">i</span>, <span class="va">counts</span>, <span class="va">groups</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<pre><code>   user  system elapsed 
+  10.14    0.19   10.34 </code></pre>
+<p>It takes 10 seconds for a single permutation. We will try to permute
+the data 50 times in a parallel fashion. The parallel code is shown
+below.</p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Bioconductor/BiocParallel" class="external-link">BiocParallel</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## I use 10 workers in my computer</span></span>
+<span><span class="co">## You might want a different number</span></span>
+<span><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SnowParam-class.html" class="external-link">SnowParam</a></span><span class="op">(</span><span class="fl">10</span>, exportglobals <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/BiocParallelParam-class.html" class="external-link">bpstart</a></span><span class="op">(</span><span class="va">param</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Repeat permutation 100 times</span></span>
+<span><span class="co">## and return a vector</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="va">myPermutation</span>, <span class="va">counts</span>, <span class="va">groups</span>, BPPARAM<span class="op">=</span><span class="va">param</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/BiocParallelParam-class.html" class="external-link">bpstop</a></span><span class="op">(</span><span class="va">param</span><span class="op">)</span></span></code></pre></div>
+<pre><code>user  system elapsed 
+0.20    0.09  128.84 </code></pre>
+<p>In my computer, it takes 128 seconds to finish. It is estimated that
+the single-threaded <code>lapply</code> will take 1000 seconds to finish
+the same computing job. We have about 7.8 times speedup. We are one step
+closer to the theoretical speedup of 10.</p>
 </div>
 </div>
 <div class="footnotes footnotes-end-of-document">
 <hr>
 <ol>
-<li id="fn1"><p><a href="mailto:seandavi@gmail.com" class="email">seandavi@gmail.com</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>University of Texas Medical Branch at Galveston<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p><a href="mailto:szwjf08@gmail.com" class="email">szwjf08@gmail.com</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>

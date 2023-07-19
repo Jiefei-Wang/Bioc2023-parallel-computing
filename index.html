@@ -53,13 +53,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/HOWTO_BUILD_WORKSHOP.html">How To Build A Workshop Package</a>
-    </li>
-    <li>
       <a href="articles/workshop.html">High-Performance Computing in R for Genomic Research</a>
-    </li>
-    <li>
-      <a href="articles/workshop_example.html">An Example Workshop</a>
     </li>
   </ul>
 </li>
@@ -83,20 +77,12 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div class="section level1">
-<div class="page-header"><h1 id="outline">Outline<a class="anchor" aria-label="anchor" href="#outline"></a>
-</h1></div>
-<p>High level concept 1. What is Parallel computing 2. Giraff example 3. How to do parallel computing in general 3.1 Start a main process 3.2 Start worker process 3.3 send tasks to workers 3.4 receive and combine results from workers</p>
-<p>Diagram</p>
-<p>Job(cake) task1, task2, task3,… worker1, worker2, worker3 …kids kiss</p>
-<ol start="4" style="list-style-type: decimal">
-<li><p>How parallel package can help us</p></li>
-<li><p>How BiocParallel comes to play 5.1 SnowParam 5.2 MulticoreParam 5.3 RedisParam: Server centered framework</p></li>
-<li><p>SharedObject</p></li>
-<li><p>performance tips</p></li>
-<li><p>All together</p></li>
-</ol>
-</div>
+
+<p>To build this docker image, run the following commands in the terminal:</p>
+<pre><code>docker build -t parallel .</code></pre>
+<p>To run this docker image, run the following commands in the terminal:</p>
+<pre><code>docker run -p 6379:6379 -p 8787:8787 -e PASSWORD=bioc -d parallel</code></pre>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
