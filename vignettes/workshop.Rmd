@@ -210,9 +210,9 @@ Note that the three components(master, Redis Server, and workers) in the diagram
 ### Set Up Redis Server
 The use of RedisParam requires a little bit more work. We need to set up a Redis server. The easiest way to do that is to use the docker image of Redis. [Here](https://docs.docker.com/install/) is the instruction to install docker on your computer. You will need WSL2(Windows Subsystem for Linux) if you are using Windows. After you have installed docker, you can run the following command to start a Redis server.
 ```
-docker run --name my-first-redis -p 6379:6379 -d redis redis-server --requirepass "1234"
+docker run --name my-first-redis -p 6379:6379 -d redis redis-server --requirepass "bioc2023"
 ```
-The command above will start a Redis server on port 6379 with password 1234. The port number 6379 is the default port used by the Redis server. We use `-p 6379:6379` to open that port to the outside world, so you can access the Redis server in the container from your computer. 
+The command above will start a Redis server on port 6379 with password bioc2023. The port number 6379 is the default port used by the Redis server. We use `-p 6379:6379` to open that port to the outside world, so you can access the Redis server in the container from your computer. 
 
 Alternatively, you might run the [docker image](https://hub.docker.com/_/redis) using the cloud container service. You can find the container service through all major cloud service providers such as Azure and Amazon. In this workshop, we provide a pre-configured Redis server running in the backgroud in the container. You are ready to go if you are using the workshop container
 
@@ -224,13 +224,13 @@ library(RedisParam)
 ## Define 4 workers using Redis server
 param <- RedisParam(
   workers = 4,
-  redis.password = '1234'
+  redis.password = 'bioc2023'
 )
 
 ## Test the cluster
 bplapply(1:4, square, BPPARAM = param)
 ```
-The code is really not that different from the SnowParam and MulticoreParam. The RedisParam will create 4 workers that connect to the Redis server on localhost(your computer) using the password 1234. If we use the cluster structure diagram, it will look like this:
+The code is really not that different from the SnowParam and MulticoreParam. The RedisParam will create 4 workers that connect to the Redis server on localhost(your computer) using the password bioc2023. If we use the cluster structure diagram, it will look like this:
 
 
 ![RedisParam-single](RedisParam-single.png)
@@ -256,7 +256,7 @@ host <- 'remote-Ip-address'
 param <- RedisParam(
   workers = 2,
   redis.hostname = host,
-  redis.password = '1234',
+  redis.password = 'bioc2023',
   jobname = "demo",
   is.worker = TRUE
 )
@@ -286,7 +286,7 @@ message("My job queue: ", jobname)
 ## Create a master param
 param <- RedisParam(
   redis.hostname = host,
-  redis.password = '1234',
+  redis.password = 'bioc2023',
   jobname = jobname,
   is.worker = FALSE
 )
