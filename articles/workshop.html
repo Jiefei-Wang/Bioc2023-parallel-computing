@@ -532,9 +532,9 @@ instruction to install docker on your computer. You will need
 WSL2(Windows Subsystem for Linux) if you are using Windows. After you
 have installed docker, you can run the following command to start a
 Redis server.</p>
-<pre><code>docker run --name my-first-redis -p 6379:6379 -d redis redis-server --requirepass "1234"</code></pre>
+<pre><code>docker run --name my-first-redis -p 6379:6379 -d redis redis-server --requirepass "bioc2023"</code></pre>
 <p>The command above will start a Redis server on port 6379 with
-password 1234. The port number 6379 is the default port used by the
+password bioc2023. The port number 6379 is the default port used by the
 Redis server. We use <code>-p 6379:6379</code> to open that port to the
 outside world, so you can access the Redis server in the container from
 your computer.</p>
@@ -556,15 +556,15 @@ the following code to create a RedisParam cluster.</p>
 <span><span class="co">## Define 4 workers using Redis server</span></span>
 <span><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RedisParam/man/RedisParam-class.html" class="external-link">RedisParam</a></span><span class="op">(</span></span>
 <span>  workers <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  redis.password <span class="op">=</span> <span class="st">'1234'</span></span>
+<span>  redis.password <span class="op">=</span> <span class="st">'bioc2023'</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Test the cluster</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/bplapply.html" class="external-link">bplapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="va">square</span>, BPPARAM <span class="op">=</span> <span class="va">param</span><span class="op">)</span></span></code></pre></div>
 <p>The code is really not that different from the SnowParam and
 MulticoreParam. The RedisParam will create 4 workers that connect to the
-Redis server on localhost(your computer) using the password 1234. If we
-use the cluster structure diagram, it will look like this:</p>
+Redis server on localhost(your computer) using the password bioc2023. If
+we use the cluster structure diagram, it will look like this:</p>
 <div class="float">
 <img src="RedisParam-single.png" alt="RedisParam-single"><div class="figcaption">RedisParam-single</div>
 </div>
@@ -609,7 +609,7 @@ ask you to “donate” some workers to our demo job queue.</p>
 <span><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RedisParam/man/RedisParam-class.html" class="external-link">RedisParam</a></span><span class="op">(</span></span>
 <span>  workers <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  redis.hostname <span class="op">=</span> <span class="va">host</span>,</span>
-<span>  redis.password <span class="op">=</span> <span class="st">'1234'</span>,</span>
+<span>  redis.password <span class="op">=</span> <span class="st">'bioc2023'</span>,</span>
 <span>  jobname <span class="op">=</span> <span class="st">"demo"</span>,</span>
 <span>  is.worker <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
@@ -654,7 +654,7 @@ do the computation.</p>
 <span><span class="co">## Create a master param</span></span>
 <span><span class="va">param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RedisParam/man/RedisParam-class.html" class="external-link">RedisParam</a></span><span class="op">(</span></span>
 <span>  redis.hostname <span class="op">=</span> <span class="va">host</span>,</span>
-<span>  redis.password <span class="op">=</span> <span class="st">'1234'</span>,</span>
+<span>  redis.password <span class="op">=</span> <span class="st">'bioc2023'</span>,</span>
 <span>  jobname <span class="op">=</span> <span class="va">jobname</span>,</span>
 <span>  is.worker <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -908,8 +908,8 @@ equal)</p>
 <span></span>
 <span><span class="co">## Calculate t statistic</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test</a></span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span></span>
-<span><span class="co">#&gt;          t </span></span>
-<span><span class="co">#&gt; -0.9864734</span></span></code></pre></div>
+<span><span class="co">#&gt;         t </span></span>
+<span><span class="co">#&gt; 0.1736587</span></span></code></pre></div>
 <p>The code above generate two samples from the uniform distribution and
 calculate the t statistic. We wrap the code in a function so that we can
 use it in the parallel backend</p>
@@ -972,7 +972,7 @@ statistics</p>
 <code class="sourceCode R"><span><span class="co">## Test the function</span></span>
 <span><span class="co">## Small value implies significance</span></span>
 <span><span class="fu">BJStat</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.04925353</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.06686276</span></span></code></pre></div>
 <p>We will use <code>airway</code> data in the airway package as an
 example. We first load the data into R.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
