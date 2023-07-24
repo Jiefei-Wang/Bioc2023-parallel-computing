@@ -12,8 +12,11 @@ The Rstudio server will be available at `http://localhost:8787/`
 * Username: rstudio
 * Password: bioc
 
+## View vignette
+Click this [link](https://github.com/Jiefei-Wang/Bioc2023-parallel-computing/blob/master/vignettes/workshop.md) to see the vignette.
+
 ## Run vignette
-To run the vignette, run the following commands in R:
+To run the vignette in R, run the following code
 ```
 vignette("workshop")
 ```
