@@ -919,8 +919,8 @@ given that the null hypothesis is true(group means are equal)</p>
 <span></span>
 <span><span class="co">## Calculate t statistic</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test</a></span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span></span>
-<span><span class="co">#&gt;        t </span></span>
-<span><span class="co">#&gt; -1.30451</span></span></code></pre></div>
+<span><span class="co">#&gt;          t </span></span>
+<span><span class="co">#&gt; -0.2924725</span></span></code></pre></div>
 <p>The code above generates two samples from the uniform distribution
 and calculates the t statistic. We wrap the code in a function so that
 we can use it in the parallel backend</p>
@@ -985,7 +985,7 @@ statistics</p>
 <code class="sourceCode R"><span><span class="co">## Test the function</span></span>
 <span><span class="co">## Small value implies the significance</span></span>
 <span><span class="fu">BJStat</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.01509149</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.484119</span></span></code></pre></div>
 <p>We will use <code>airway</code> data in the airway package as an
 example. We first load the data into R.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
