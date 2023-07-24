@@ -17,3 +17,5 @@ To run the vignette, run the following commands in R:
 ```
 vignette("workshop")
 ```
+
+
