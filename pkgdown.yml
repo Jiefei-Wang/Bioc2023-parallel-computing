@@ -3,7 +3,7 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   workshop: workshop.html
-last_built: 2023-07-24T02:36Z
+last_built: 2023-08-02T17:19Z
 urls:
   reference: https://jiefei-wang.github.io/Bioc2023-parallel-computing/reference
   article: https://jiefei-wang.github.io/Bioc2023-parallel-computing/articles
